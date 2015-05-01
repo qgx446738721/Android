@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">mblog</string>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+    <string name="load_more">正在加载</string>
+    <!--主页menu-->
+    <string name="main_menu_list_home">HOME</string>
+    <string name="main_menu_list_hot">HOT</string>
+    <string name="main_menu_list_time_line">TIMELINE</string>
+    <string name="main_menu_list_setting">SETTINGS</string>
+    <string name="main_menu_list_login">LOGIN</string>
+</resources>

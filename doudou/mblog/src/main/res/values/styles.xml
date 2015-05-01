@@ -1,0 +1,32 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--状态栏颜色-->
+        <item name="colorPrimaryDark">@color/bg</item>
+        <!--Toolbar颜色-->
+        <item name="colorPrimary">@color/bg</item>
+        <!--返回键样式-->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
+        <item name="android:windowBackground">@color/bg</item>
+    </style>
+    <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/title_left_icon</item>
+    </style>
+    <!--主页菜单栏-->
+    <style name="MainMenuList">
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_list_txt_normal</item>
+    </style>
+    <style name="MainMenuSubList">
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/main_list_txt_normal</item>
+    </style>
+    <!--文章详情页面-->
+    <style name="ArticleDetailContent">
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#ddd</item>
+        <item name="android:background">@color/article_content_bg</item>
+    </style>
+</resources>

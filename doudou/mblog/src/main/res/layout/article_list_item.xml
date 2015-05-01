@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CustomFontTextView="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:id="@+id/fl_card_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdv_card_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            fresco:placeholderImageScaleType="fitXY"
+            android:contentDescription="原图" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_black_img_bg"
+            android:contentDescription="蒙版图" />
+    </FrameLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.voiddog.lib.ui.CustomFontTextView
+            android:id="@+id/cf_tv_title"
+            CustomFontTextView:fontFace="fangzhen-liu.ttf"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="@dimen/article_item_title_size"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:textSize="@dimen/article_item_sub_title_size"
+            android:id="@+id/tv_sub_title"
+            android:gravity="center_horizontal|top"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</FrameLayout>

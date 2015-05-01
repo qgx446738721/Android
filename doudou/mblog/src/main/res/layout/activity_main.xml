@@ -1,0 +1,28 @@
+<FrameLayout
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity_"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.v4.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dl_main">
+
+        <!--主要布局-->
+        <FrameLayout
+            android:id="@+id/ll_main_fragment"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+        <include layout="@layout/main_menu_list"/>
+
+    </android.support.v4.widget.DrawerLayout>
+
+    <include layout="@layout/tool_bar"/>
+
+</FrameLayout>

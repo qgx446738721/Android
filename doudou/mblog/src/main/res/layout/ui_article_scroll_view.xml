@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/niv_article_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/card_black_img_bg">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <TextView
+                android:id="@+id/tv_article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/clouds"
+                android:textSize="23sp"/>
+
+            <TextView
+                android:id="@+id/tv_article_sub_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/sliver"
+                android:padding="10dp"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_article_content"
+                android:layout_width="match_parent"
+                android:textSize="16sp"
+                android:textColor="@color/article_content"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+    </ScrollView>
+</merge>

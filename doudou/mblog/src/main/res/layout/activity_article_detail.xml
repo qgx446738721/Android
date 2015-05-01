@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/article_content_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_blur_bg"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="模糊背景" />
+
+    <ScrollView
+        android:background="@color/article_content_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_height" />
+
+            <ImageView
+                android:id="@+id/iv_card_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:contentDescription="本文章的照片" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                style="@style/ArticleDetailContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <org.voiddog.mblog.ui.TitleBar_
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        TitleBar:titleBg="@drawable/title_bar_bg"
+        TitleBar:leftIcon="fa-arrow-left"/>
+
+</FrameLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--头部Bar的参数-->
+    <declare-styleable name="TitleBar">
+        <attr name="titleBg" format="color|reference"/>
+        <attr name="leftColor" format="color"/>
+        <attr name="leftIcon" format="string"/>
+        <attr name="leftText" format="string"/>
+        <attr name="rightColor" format="color"/>
+        <attr name="rightIcon" format="string"/>
+        <attr name="rightText" format="string"/>
+        <attr name="titleColor" format="color"/>
+        <attr name="titleText" format="string"/>
+    </declare-styleable>
+</resources>

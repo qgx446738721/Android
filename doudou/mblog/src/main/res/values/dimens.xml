@@ -1,0 +1,12 @@
+<resources>
+    <!--主页菜单-->
+    <dimen name="main_menu_head_img_size">65dp</dimen>
+    <!--title bar 部分 -->
+    <dimen name="title_height">50dp</dimen>
+    <dimen name="icon_size">16sp</dimen>
+    <dimen name="padding_icon_start">15dp</dimen>
+    <dimen name="title_size">18sp</dimen>
+    <!--文章item-->
+    <dimen name="article_item_title_size">32sp</dimen>
+    <dimen name="article_item_sub_title_size">14sp</dimen>
+</resources>
