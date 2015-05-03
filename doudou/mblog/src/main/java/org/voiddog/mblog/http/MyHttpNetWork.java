@@ -1,18 +1,14 @@
 package org.voiddog.mblog.http;
 
-import android.util.Log;
-
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
 
 import org.voiddog.lib.http.DHttpRequestBase;
 import org.voiddog.lib.http.DJsonObjectResponse;
 import org.voiddog.lib.http.HttpNetWork;
 import org.voiddog.lib.util.ToastUtil;
-import org.voiddog.mblog.MyApplication;
 
 /**
+ * 网络请求类
  * Created by Dog on 2015/4/14.
  */
 public class MyHttpNetWork extends HttpNetWork {

@@ -13,9 +13,6 @@ import org.voiddog.lib.BaseApplication;
  */
 @EApplication
 public class MyApplication extends BaseApplication {
-    public static String HOST = "http://voiddog.vicp.cc:8008/blog/public/mobile/";
-    public static String IMG_HOST = "http://voiddog.vicp.cc:8008/blog/public/photo/";
-
     private static MyApplication instance;
 
     @Override
@@ -34,7 +31,7 @@ public class MyApplication extends BaseApplication {
      * 获取图片的链接
      */
     public static String getImageHost(String url){
-        return IMG_HOST + url;
+        return Const.IMG_HOST + url;
     }
 
     /**

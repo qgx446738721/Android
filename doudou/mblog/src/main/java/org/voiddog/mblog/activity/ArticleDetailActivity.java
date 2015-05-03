@@ -15,8 +15,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.voiddog.lib.http.DJsonObjectResponse;
 import org.voiddog.lib.util.ImageCacheManager;
@@ -77,17 +79,16 @@ public class ArticleDetailActivity extends ActionBarActivity{
         MyHttpNetWork.getInstance().request(getArticle, new DJsonObjectResponse() {
             @Override
             public void onSuccess(int statusCode, DResponse response) {
-                if(response.code == 0){
+                if (response.code == 0) {
                     try {
                         HttpStruct.Article article = response.getData(HttpStruct.Article.class);
                         tv_content.setText(article.body);
                         loadImage(article.image);
-                    } catch (Exception ignore){
+                    } catch (Exception ignore) {
                         ToastUtil.showToast("数据错误");
                         ArticleDetailActivity.this.finish();
                     }
-                }
-                else{
+                } else {
                     ToastUtil.showToast(response.message);
                     ArticleDetailActivity.this.finish();
                 }
@@ -113,7 +114,7 @@ public class ArticleDetailActivity extends ActionBarActivity{
                 Bitmap bitmap = response.getBitmap();
                 if(bitmap != null){
                     iv_card_head.setImageBitmap(bitmap);
-                    iv_blur_bg.setImageBitmap(ImageUtil.getBlurImage(bitmap, ArticleDetailActivity.this));
+                    startBlur(bitmap);
                 }
             }
 
@@ -124,5 +125,16 @@ public class ArticleDetailActivity extends ActionBarActivity{
         };
         ImageCacheManager.getInstacne().getImageLoader().get(url, imageListener, SizeUtil.getScreenWidth(),
                 SizeUtil.getScreenHeight());
+    }
+
+    @Background
+    void startBlur(Bitmap bitmap){
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, ArticleDetailActivity.this);
+        setBlur(newBitmap);
+    }
+
+    @UiThread
+    void setBlur(Bitmap blur){
+        iv_blur_bg.setImageBitmap(blur);
     }
 }

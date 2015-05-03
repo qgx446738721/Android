@@ -44,7 +44,6 @@ public class CustomFontTextView extends TextView{
         if(name == null){
             return;
         }
-        Log.i("TAG", "set font: " + name);
         try {
             Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + name);
             setTypeface(typeface);

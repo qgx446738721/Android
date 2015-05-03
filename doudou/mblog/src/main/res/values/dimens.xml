@@ -1,4 +1,6 @@
 <resources>
+    <!--dialog size-->
+    <dimen name="dialog_size">100dp</dimen>
     <!--主页菜单-->
     <dimen name="main_menu_head_img_size">65dp</dimen>
     <!--title bar 部分 -->

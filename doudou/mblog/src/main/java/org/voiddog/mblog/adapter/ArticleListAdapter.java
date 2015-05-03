@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import org.voiddog.mblog.R;
+import org.voiddog.mblog.http.HttpStruct;
 import org.voiddog.mblog.ui.ArticleItem;
 import org.voiddog.mblog.ui.ArticleItem_;
 
@@ -16,15 +17,15 @@ import java.util.List;
  */
 public class ArticleListAdapter extends BaseAdapter{
 
-    List<Data> dataList = null;
+    List<HttpStruct.Article> dataList = null;
 
     public ArticleListAdapter(){}
 
-    public ArticleListAdapter(List<Data> dataList){
+    public ArticleListAdapter(List<HttpStruct.Article> dataList){
         this.dataList = dataList;
     }
 
-    public void addAll(List<Data> dataList){
+    public void addAll(List<HttpStruct.Article> dataList){
         if(this.dataList == null){
             this.dataList = dataList;
         }
@@ -66,16 +67,8 @@ public class ArticleListAdapter extends BaseAdapter{
             articleItem = (ArticleItem) convertView;
         }
 
-        articleItem.bind((Data) getItem(position));
+        articleItem.bind((HttpStruct.Article) getItem(position));
 
         return articleItem;
-    }
-
-    public static class Data{
-        public int id = 0;
-        public String image;
-        public String title;
-        public String subtitle;
-        public String content;
     }
 }

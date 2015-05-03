@@ -51,6 +51,10 @@ public class ImageUtil {
     public static Bitmap getBlurImage(Bitmap in, Context context){
         float scaleFactor = 8;
         float radius = 2;
+        return getBlurImage(in, context, scaleFactor, radius);
+    }
+
+    public static Bitmap getBlurImage(Bitmap in, Context context, float scaleFactor, float radius){
         Bitmap overlay = Bitmap.createBitmap((int) (in.getWidth()/scaleFactor),
                 (int) (in.getHeight()/scaleFactor), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);

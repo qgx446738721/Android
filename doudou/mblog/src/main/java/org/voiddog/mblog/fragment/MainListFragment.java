@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +21,6 @@ import org.voiddog.mblog.http.HttpStruct;
 import org.voiddog.mblog.http.MyHttpNetWork;
 import org.voiddog.mblog.http.MyHttpRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -67,15 +65,15 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     @AfterViews
     void init(){
         context = getActivity();
-        setUpFootView();
+        setUpFootAndHeadView();
         setUpPtrFresh();
         setUpListView();
     }
 
     @ItemClick(R.id.lv_main)
-    void onItemClick(ArticleListAdapter.Data data){
+    void onItemClick(HttpStruct.Article data){
         ArticleDetailActivity_.intent(context).extra("article_id", data.id)
-                .extra("article_content", data.content)
+                .extra("article_content", data.body)
                 .extra("article_title", data.title)
                 .extra("article_subtitle", data.subtitle).start();
     }
@@ -102,10 +100,14 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
         ptr_main.autoRefresh();
     }
 
-    void setUpFootView(){
+    void setUpFootAndHeadView(){
         View view = View.inflate(context, R.layout.load_more_foot_view, null);
         foot_view = (TextView) view.findViewById(R.id.tv_load_more);
         lv_main.addFooterView(view);
+        View headView = new TextView(context);
+        headView.setPadding(0, context.getResources().getDimensionPixelSize(R.dimen.title_height)
+                - PtrLocalDisplay.dp2px(15), 0, 0);
+        lv_main.addHeaderView(headView);
         ArticleListAdapter tmpAdapter = new ArticleListAdapter(null);
         lv_main.setAdapter(tmpAdapter);
     }
@@ -133,17 +135,6 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
                 if(response.code == 0) {
                     ToastUtil.showToast("refresh Complete!");
                     List<HttpStruct.Article> articleList = response.getData(new TypeToken<List<HttpStruct.Article>>() {}.getType());
-                    List<ArticleListAdapter.Data> dataList = new ArrayList<>();
-                    for(int i = 0; i < articleList.size(); i++){
-                        ArticleListAdapter.Data entity = new ArticleListAdapter.Data();
-                        HttpStruct.Article article = articleList.get(i);
-                        entity.title = article.title;
-                        entity.subtitle = article.subtitle;
-                        entity.content = article.body;
-                        entity.image = article.image;
-                        entity.id = article.id;
-                        dataList.add(entity);
-                    }
                     if(adapter == null){
                         adapter = new ArticleListAdapter();
                     }
@@ -153,7 +144,7 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
                     if(lv_main.getAdapter() != adapter){
                         lv_main.setAdapter(adapter);
                     }
-                    adapter.addAll(dataList);
+                    adapter.addAll(articleList);
                     currentPage++;
                     if (articleList.size() < num){
                         hasMore = false;

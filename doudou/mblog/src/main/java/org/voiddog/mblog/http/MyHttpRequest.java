@@ -1,9 +1,7 @@
 package org.voiddog.mblog.http;
 
-import org.voiddog.lib.http.DHttpRequestBase;
-
 /**
- *
+ * 网络请求
  * Created by Dog on 2015/4/4.
  */
 public class MyHttpRequest {
@@ -15,10 +13,10 @@ public class MyHttpRequest {
         }
     }
 
-    public static class MTest extends MyHttpRequestBase{
-
-        public MTest() {
-            super("test");
+    public static class UserLogout extends MyHttpRequestBase{
+        public UserLogout(){
+            super("logout");
+            method = GET;
         }
     }
 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/iv_blur_bg"
+        android:contentDescription="模糊背景"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:TitleBar="http://schemas.android.com/apk/res-auto"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        xmlns:CustomFontTextView="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.voiddog.mblog.ui.TitleBar_
+            android:id="@+id/title_bar"
+            TitleBar:titleBg="@color/chose_login_bg"
+            TitleBar:leftIcon="fa-close"
+            TitleBar:titleText="GET START"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"/>
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdv_login_or_register_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            fresco:placeholderImage="@mipmap/login_bg"
+            fresco:placeholderImageScaleType="centerCrop"
+            fresco:failureImage="@mipmap/login_bg"
+            fresco:failureImageScaleType="centerCrop"
+            android:scaleType="centerCrop"/>
+
+        <org.voiddog.lib.ui.CustomFontTextView
+            CustomFontTextView:fontFace="Roboto-Light.ttf"
+            android:id="@+id/ct_tv_login"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@color/chose_login_bg"
+            android:textSize="24sp"
+            android:text="@string/login"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <org.voiddog.lib.ui.CustomFontTextView
+            CustomFontTextView:fontFace="Roboto-Light.ttf"
+            android:id="@+id/ct_tv_register"
+            android:gravity="center"
+            android:background="@color/chose_register_bg"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:text="@string/register"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</FrameLayout>

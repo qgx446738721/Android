@@ -7,26 +7,51 @@
         <!--返回键样式-->
         <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
         <item name="android:windowBackground">@color/bg</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style>
+    <style parent="@android:style/Animation.Activity" name="AnimationActivity" mce_bogus="1">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_to_bottom</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_top</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_to_top</item>
     </style>
     <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/title_left_icon</item>
     </style>
+    <style name="ProgressDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@drawable/dialog_progress_bg</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <!--主页菜单栏-->
     <style name="MainMenuList">
-        <item name="android:layout_marginBottom">20dp</item>
-        <item name="android:textSize">32sp</item>
-        <item name="android:textColor">@color/main_list_txt_normal</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
     <style name="MainMenuSubList">
         <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/main_list_txt_normal</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
-    <!--文章详情页面-->
+    <!--照片详情页面-->
     <style name="ArticleDetailContent">
         <item name="android:padding">15dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">#ddd</item>
         <item name="android:background">@color/article_content_bg</item>
+    </style>
+    <!--登录页面-->
+    <style name="LoginEditText">
+        <item name="android:textColor">@color/clouds</item>
+        <item name="android:textColorHint">#44ffffff</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@null</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textCursorDrawable">@null</item>
     </style>
 </resources>

@@ -1,92 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:CustomFont="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_gravity="start"
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:layout_gravity="start"
+    android:background="@color/bg"
+    xmlns:CustomFont="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CircleImageView="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_marginTop="@dimen/title_height"
-        android:padding="10dp"
-        android:orientation="horizontal"
+    <ImageView
+        android:id="@+id/iv_blur_bg"
+        android:contentDescription="模糊背景层"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/sdv_user_head"
-            android:layout_width="@dimen/main_menu_head_img_size"
-            android:layout_height="@dimen/main_menu_head_img_size" />
-
-        <org.voiddog.lib.ui.CustomFontTextView
-            android:id="@+id/ct_tv_user_name"
-            CustomFont:fontFace="Roboto-Light.ttf"
-            android:gravity="center_vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:textSize="24sp"
-            android:textColor="@color/clouds"
-            android:paddingLeft="10dp"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
     <LinearLayout
+        android:id="@+id/ll_main_list"
         android:orientation="vertical"
-        android:padding="20dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:background="@color/main_list_bg">
 
-        <org.voiddog.lib.ui.CustomFontTextView
-            android:id="@+id/ct_tv_home"
-            style="@style/MainMenuList"
-            android:text="@string/main_menu_list_home"
-            CustomFont:fontFace="Roboto-Light.ttf"
+        <LinearLayout
+            android:layout_marginTop="@dimen/title_height"
+            android:padding="10dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <org.voiddog.lib.ui.CustomFontTextView
-            android:id="@+id/ct_tv_hot"
-            style="@style/MainMenuList"
-            android:text="@string/main_menu_list_hot"
-            CustomFont:fontFace="Roboto-Light.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <org.voiddog.lib.ui.CircleNetworkImageView
+                android:id="@+id/cn_iv_user_head"
+                android:src="@mipmap/no_head"
+                CircleImageView:border_width="0dp"
+                CircleImageView:border_color="#fff"
+                android:layout_width="@dimen/main_menu_head_img_size"
+                android:layout_height="@dimen/main_menu_head_img_size" />
 
-        <org.voiddog.lib.ui.CustomFontTextView
-            android:id="@+id/ct_tv_timeline"
-            style="@style/MainMenuList"
-            android:text="@string/main_menu_list_time_line"
-            CustomFont:fontFace="Roboto-Light.ttf"
+            <org.voiddog.lib.ui.CustomFontTextView
+                android:id="@+id/ct_tv_user_name"
+                CustomFont:fontFace="Roboto-Light.ttf"
+                android:gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="24sp"
+                android:textColor="@color/clouds"
+                android:paddingLeft="10dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <org.voiddog.lib.ui.CustomFontTextView
+                android:id="@+id/ct_tv_home"
+                style="@style/MainMenuList"
+                android:text="@string/main_menu_list_home"
+                CustomFont:fontFace="Roboto-Light.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <org.voiddog.lib.ui.CustomFontTextView
+                android:id="@+id/ct_tv_hot"
+                style="@style/MainMenuList"
+                android:text="@string/main_menu_list_hot"
+                CustomFont:fontFace="Roboto-Light.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <org.voiddog.lib.ui.CustomFontTextView
+                android:id="@+id/ct_tv_timeline"
+                style="@style/MainMenuList"
+                android:text="@string/main_menu_list_time_line"
+                CustomFont:fontFace="Roboto-Light.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <org.voiddog.lib.ui.CustomFontTextView
+                android:id="@+id/ct_tv_settings"
+                style="@style/MainMenuSubList"
+                android:text="@string/main_menu_list_setting"
+                CustomFont:fontFace="Roboto-Light.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <org.voiddog.lib.ui.CustomFontTextView
+                android:id="@+id/ct_tv_auth"
+                style="@style/MainMenuSubList"
+                android:text="@string/main_menu_list_login"
+                CustomFont:fontFace="Roboto-Light.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <org.voiddog.lib.ui.CustomFontTextView
-            android:id="@+id/ct_tv_settings"
-            style="@style/MainMenuSubList"
-            android:text="@string/main_menu_list_setting"
-            CustomFont:fontFace="Roboto-Light.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <org.voiddog.lib.ui.CustomFontTextView
-            android:id="@+id/ct_tv_auth"
-            style="@style/MainMenuSubList"
-            android:text="@string/main_menu_list_login"
-            CustomFont:fontFace="Roboto-Light.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

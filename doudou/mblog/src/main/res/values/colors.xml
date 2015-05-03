@@ -28,8 +28,9 @@
     <color name="sliver">#BDC3C7</color>
     <!--主页-->
     <color name="bg">#333</color>
-    <color name="main_list_txt_normal">#bbb</color>
-    <color name="main_list_txt_pressed">#fff</color>
+    <color name="main_list_bg">#aa000000</color>
+    <color name="main_list_txt_normal">#00ffffff</color>
+    <color name="main_list_txt_pressed">#55000000</color>
     <color name="title_text">#fff</color>
     <color name="title_left_icon">#fff</color>
     <!--dark color-->
@@ -41,4 +42,7 @@
     <!--article detail-->
     <color name="article_content_bg">#55000000</color>
     <color name="article_content">#ddd</color>
+    <!--chose auth-->
+    <color name="chose_login_bg">#77333333</color>
+    <color name="chose_register_bg">#773498DB</color>
 </resources>

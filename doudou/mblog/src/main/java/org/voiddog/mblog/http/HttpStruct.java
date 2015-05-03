@@ -14,8 +14,9 @@ public class HttpStruct {
     }
 
     public class User{
-        public int id;
-        public String remember_token;
+        public int uid;
+        public String nickname;
+        public String head;
     }
 
     public class Card{

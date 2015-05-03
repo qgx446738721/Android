@@ -1,7 +1,7 @@
 package org.voiddog.mblog.http;
 
 import org.voiddog.lib.http.DHttpRequestBase;
-import org.voiddog.mblog.MyApplication;
+import org.voiddog.mblog.Const;
 
 /**
  *
@@ -10,6 +10,6 @@ import org.voiddog.mblog.MyApplication;
 public class MyHttpRequestBase extends DHttpRequestBase {
 
     public MyHttpRequestBase(String action) {
-        super(MyApplication.HOST + action);
+        super(Const.HOST + action);
     }
 }
