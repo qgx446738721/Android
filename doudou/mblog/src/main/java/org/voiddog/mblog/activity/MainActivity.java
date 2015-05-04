@@ -3,7 +3,7 @@ package org.voiddog.mblog.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -13,9 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.BasePostprocessor;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.imagepipeline.request.Postprocessor;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -27,9 +34,7 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.voiddog.lib.http.DJsonObjectResponse;
 import org.voiddog.lib.http.HttpNetWork;
-import org.voiddog.lib.ui.CircleNetworkImageView;
 import org.voiddog.lib.ui.CustomFontTextView;
-import org.voiddog.lib.util.ImageCacheManager;
 import org.voiddog.lib.util.ImageUtil;
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.lib.util.ToastUtil;
@@ -51,9 +56,11 @@ public class MainActivity extends ActionBarActivity {
     @ViewById
     CustomFontTextView ct_tv_home, ct_tv_user_name, ct_tv_auth;
     @ViewById
-    CircleNetworkImageView cn_iv_user_head;
+    SimpleDraweeView sdv_iv_user_head;
     @ViewById
     ImageView iv_blur_bg;
+    @ViewById
+    LinearLayout ll_main_list;
     @Pref
     Config_ config;
 
@@ -64,6 +71,8 @@ public class MainActivity extends ActionBarActivity {
     boolean isUserLogin = false;
 
     final int REQUEST_AUTH = 0;
+
+    Bitmap testBitmap = null;
 
     @AfterViews
     void init(){
@@ -117,7 +126,6 @@ public class MainActivity extends ActionBarActivity {
             }
             case R.id.ct_tv_hot:{
                 activeView(view);
-                break;
             }
             case R.id.ct_tv_timeline:{
                 activeView(view);
@@ -213,38 +221,47 @@ public class MainActivity extends ActionBarActivity {
         ct_tv_user_name.setText("NOT LOGIN");
         ct_tv_auth.setText("LOGIN");
         iv_blur_bg.setVisibility(View.INVISIBLE);
-        cn_iv_user_head.setLocalBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.no_head));
+        sdv_iv_user_head.setImageURI(Uri.parse("android.resource://"+getPackageName()+"/"+R.mipmap.no_head));
+        ll_main_list.setBackgroundResource(R.color.transparent);
     }
 
     void loadProfile(String head, String name){
         ct_tv_auth.setText("LOGOUT");
         name = name.toUpperCase();
         ct_tv_user_name.setText(name);
-        ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
+        Uri uri = MyApplication.getImageHostUri(head);
+        Postprocessor postprocessor = new BasePostprocessor() {
             @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                Bitmap bitmap = response.getBitmap();
-                if(bitmap != null){
-                    startBlur(bitmap);
-                    cn_iv_user_head.setLocalBitmap(bitmap);
-                }
+            public String getName() {
+                return "postprocessor";
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {}
+            public void process(Bitmap bitmap) {
+                testBitmap = bitmap;
+                startBlur(bitmap);
+            }
         };
-        ImageCacheManager.getInstacne().getImageLoader().get(MyApplication.getImageHost(head),
-                imageListener, SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight());
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()))
+                .setPostprocessor(postprocessor)
+                .build();
+        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setImageRequest(imageRequest)
+                .setOldController(sdv_iv_user_head.getController())
+                .build();
+        sdv_iv_user_head.setController(controller);
     }
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, mainActivity, 8, 2);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, mainActivity, 16.0f, 3.0f);
         applyBlur(newBitmap);
     }
 
     @UiThread
     void applyBlur(Bitmap bitmap){
+        ll_main_list.setBackgroundResource(R.color.main_list_bg);
         iv_blur_bg.setImageBitmap(bitmap);
         iv_blur_bg.setVisibility(View.VISIBLE);
     }

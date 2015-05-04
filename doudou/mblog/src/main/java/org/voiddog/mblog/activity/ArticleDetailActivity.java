@@ -1,18 +1,22 @@
 package org.voiddog.mblog.activity;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.BasePostprocessor;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.imagepipeline.request.Postprocessor;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -21,7 +25,6 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.voiddog.lib.http.DJsonObjectResponse;
-import org.voiddog.lib.util.ImageCacheManager;
 import org.voiddog.lib.util.ImageUtil;
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.lib.util.ToastUtil;
@@ -41,7 +44,9 @@ public class ArticleDetailActivity extends ActionBarActivity{
     @ViewById
     TitleBar title_bar;
     @ViewById
-    ImageView iv_card_head, iv_blur_bg;
+    ImageView iv_blur_bg;
+    @ViewById
+    SimpleDraweeView sdv_card_head;
     @ViewById
     TextView tv_content;
     @Extra
@@ -58,7 +63,7 @@ public class ArticleDetailActivity extends ActionBarActivity{
         }
         setUpTitle();
         //设置图片大小为1:1
-        iv_card_head.getLayoutParams().height = SizeUtil.getScreenWidth();
+        sdv_card_head.setAspectRatio(1.0f);
         //填充原始数据
         tv_content.setText(article_content);
         loadData();
@@ -107,24 +112,27 @@ public class ArticleDetailActivity extends ActionBarActivity{
      */
     void loadImage(String image){
         if(image == null) return;
-        String url = MyApplication.getImageHost(image);
-        ImageLoader.ImageListener imageListener = new ImageLoader.ImageListener() {
+        Uri uri = MyApplication.getImageHostUri(image);
+        Postprocessor postprocessor = new BasePostprocessor() {
             @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                Bitmap bitmap = response.getBitmap();
-                if(bitmap != null){
-                    iv_card_head.setImageBitmap(bitmap);
-                    startBlur(bitmap);
-                }
+            public String getName() {
+                return "postprocessor";
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {
-
+            public void process(Bitmap bitmap) {
+                startBlur(bitmap);
             }
         };
-        ImageCacheManager.getInstacne().getImageLoader().get(url, imageListener, SizeUtil.getScreenWidth(),
-                SizeUtil.getScreenHeight());
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()))
+                .setPostprocessor(postprocessor)
+                .build();
+        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setImageRequest(imageRequest)
+                .setOldController(sdv_card_head.getController())
+                .build();
+        sdv_card_head.setController(controller);
     }
 
     @Background

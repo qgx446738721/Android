@@ -6,7 +6,7 @@
     android:background="@color/bg"
     xmlns:CustomFont="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:CircleImageView="http://schemas.android.com/apk/res-auto">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/iv_blur_bg"
@@ -19,8 +19,7 @@
         android:id="@+id/ll_main_list"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/main_list_bg">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_marginTop="@dimen/title_height"
@@ -29,11 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <org.voiddog.lib.ui.CircleNetworkImageView
-                android:id="@+id/cn_iv_user_head"
-                android:src="@mipmap/no_head"
-                CircleImageView:border_width="0dp"
-                CircleImageView:border_color="#fff"
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdv_iv_user_head"
+                fresco:failureImage="@mipmap/no_head"
+                fresco:failureImageScaleType="centerCrop"
+                fresco:placeholderImage="@mipmap/no_head"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:roundAsCircle="true"
                 android:layout_width="@dimen/main_menu_head_img_size"
                 android:layout_height="@dimen/main_menu_head_img_size" />
 
