@@ -255,7 +255,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, mainActivity, 16.0f, 3.0f);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 8, 4);
         applyBlur(newBitmap);
     }
 

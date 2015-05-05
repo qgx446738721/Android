@@ -74,7 +74,7 @@ public class LoginOrRegisterActivity extends Activity {
     @Background
     void startBlur(){
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.login_bg);
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, LoginOrRegisterActivity.this);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap);
         setBlur(newBitmap);
         bitmap.recycle();
     }

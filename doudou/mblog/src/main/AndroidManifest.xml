@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.voiddog.mblog" >
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 用于调用 JNI -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".MyApplication_"
         android:allowBackup="true"
@@ -20,12 +25,24 @@
         <activity
             android:name=".activity.ArticleDetailActivity_"
             android:screenOrientation="portrait"
-            android:label="照片详情"/>
+            android:label="照片详情">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.LoginOrRegisterActivity_"
             android:screenOrientation="portrait"
             android:label="选择登录还是注册页面"/>
         <activity android:name=".activity.LoginActivity_"
             android:screenOrientation="portrait"
             android:label="登录"/>
+        <!-- 必须注册在微博授权，分享微博时候用到 -->
+        <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+        <service android:name="com.sina.weibo.sdk.net.DownloadService"
+            android:exported="false"/>
     </application>
 </manifest>

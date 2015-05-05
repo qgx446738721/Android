@@ -40,7 +40,9 @@
     <!--card view-->
     <color name="card_view_bg">@null</color>
     <!--article detail-->
+    <color name="article_title_bg">#55000000</color>
     <color name="article_content_bg">#55000000</color>
+    <color name="article_bg">#33000000</color>
     <color name="article_content">#ddd</color>
     <!--chose auth-->
     <color name="chose_login_bg">#77333333</color>

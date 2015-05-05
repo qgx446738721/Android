@@ -4,8 +4,11 @@
     android:clipToPadding="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/article_bg"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:TitleBar="http://schemas.android.com/apk/res-auto">
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto"
+    xmlns:fontawesometext="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/iv_blur_bg"
@@ -33,13 +36,95 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:contentDescription="本文章的照片" />
+                android:contentDescription="本文章的照片"/>
 
             <TextView
                 android:id="@+id/tv_content"
                 style="@style/ArticleDetailContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:background="@color/article_content_bg"
+                android:padding="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv_user_head"
+                    android:layout_gravity="center_vertical"
+                    fresco:failureImage="@mipmap/no_head"
+                    fresco:failureImageScaleType="centerCrop"
+                    fresco:placeholderImage="@mipmap/no_head"
+                    fresco:placeholderImageScaleType="centerCrop"
+                    fresco:roundAsCircle="true"
+                    android:layout_width="@dimen/article_detail_head_size"
+                    android:layout_height="@dimen/article_detail_head_size" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <com.beardedhen.androidbootstrap.FontAwesomeText
+                        style="@style/ArticleDetailUserInfo"
+                        fontawesometext:fa_icon="fa-user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <com.beardedhen.androidbootstrap.FontAwesomeText
+                        style="@style/ArticleDetailUserInfo"
+                        fontawesometext:fa_icon="fa-clock-o"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:textSize="16sp"
+                        android:textColor="#fff"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:textSize="16sp"
+                        android:textColor="#fff"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <com.beardedhen.androidbootstrap.FontAwesomeText
+                    android:id="@+id/fat_share"
+                    android:textSize="32sp"
+                    android:textColor="#fff"
+                    android:gravity="center"
+                    fontawesometext:fa_icon="fa-share-square-o"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/article_detail_reply_height"/>
 
         </LinearLayout>
 
@@ -49,7 +134,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
-        TitleBar:titleBg="@color/transparent"
+        TitleBar:titleBg="@color/article_title_bg"
         TitleBar:leftIcon="fa-arrow-left"/>
 
 </FrameLayout>

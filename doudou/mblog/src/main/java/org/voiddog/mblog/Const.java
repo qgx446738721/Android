@@ -15,4 +15,8 @@ public class Const {
     //主页列表存储路径
     public static String LIST_CACHE_PATH = "listCache";
     public static String HOME_LIST = "home";
+
+    //微博app key
+    public static String WB_APP_KEY = "1308946905";
+    public static int WB_API_VERSION = 10351;
 }
