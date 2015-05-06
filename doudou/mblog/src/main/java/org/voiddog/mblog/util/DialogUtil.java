@@ -18,6 +18,7 @@ public class DialogUtil {
         View view = View.inflate(context, R.layout.dialog_progress, null);
         dialog.setContentView(view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        dialog.setCancelable(false);
         return dialog;
     }
 }

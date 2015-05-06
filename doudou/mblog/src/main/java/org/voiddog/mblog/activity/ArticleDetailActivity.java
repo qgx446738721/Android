@@ -1,5 +1,6 @@
 package org.voiddog.mblog.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -50,6 +52,7 @@ import org.voiddog.mblog.http.HttpStruct;
 import org.voiddog.mblog.http.MyHttpNetWork;
 import org.voiddog.mblog.http.MyHttpRequest;
 import org.voiddog.mblog.ui.TitleBar;
+import org.voiddog.mblog.util.DialogUtil;
 
 /**
  * 文件详情页面
@@ -73,6 +76,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     String article_content, article_title, article_subtitle;
 
     IWeiboShareAPI mWeiboShareAPI;
+    Dialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +119,8 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+        //给progress 赋值
+        progressDialog = DialogUtil.createProgressDialog(this);
         setUpTitle();
         //设置图片大小为1:1
         sdv_card_head.setAspectRatio(1.0f);
@@ -139,10 +145,14 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     }
 
     void loadData(){
+        if(!progressDialog.isShowing()){
+            progressDialog.show();
+        }
         MyHttpRequest.GetArticle getArticle = new MyHttpRequest.GetArticle(article_id);
         MyHttpNetWork.getInstance().request(getArticle, new DJsonObjectResponse() {
             @Override
             public void onSuccess(int statusCode, DResponse response) {
+                progressDialog.cancel();
                 if (response.code == 0) {
                     try {
                         HttpStruct.Article article = response.getData(HttpStruct.Article.class);
@@ -170,6 +180,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
 
             @Override
             public void onFailure(int statusCode, Throwable throwable) {
+                progressDialog.cancel();
                 ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
                 ArticleDetailActivity.this.finish();
             }
@@ -215,6 +226,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
         sdv_card_head.setDrawingCacheEnabled(true);
         ImageObject imageObject = new ImageObject();
         imageObject.setImageObject(sdv_card_head.getDrawingCache());
+        multiMessage.imageObject = imageObject;
         return multiMessage;
     }
 
