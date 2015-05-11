@@ -6,7 +6,7 @@
 ## 照片分享的应用
 
 ##日志
-至`2015-5-1` 大致完成框架，网络请求，图片的模糊效果，上传到`github`
+###至`2015-5-1` 大致完成框架，网络请求，图片的模糊效果，上传到`github`
 >* 完成主页样式，下拉刷新，上拉加载
 
 ![](https://github.com/qgx446738721/Android/blob/master/art/loading.jpg?raw=true)
@@ -22,8 +22,8 @@
 
 ![](https://github.com/qgx446738721/Android/blob/master/art/article_detail.jpg?raw=true)
 
-至`2015-5-2` 完成登陆，登出操作
+###至`2015-5-2` 完成登陆，登出操作
 
 ![](https://github.com/qgx446738721/Android/blob/master/art/loagin.jpg?raw=true)
 
-至`2015-5-5` 可以分享到微博
+###至`2015-5-5` 可以分享到微博
