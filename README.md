@@ -4,11 +4,11 @@
 组员 `戚耿鑫`, `朱梁英`
 
 ##第三方库
->* 注解框架 ![AndroidAnnonations](http://androidannotations.org/)
->* 网络访问框架 ![Android-async-http](http://loopj.com/android-async-http/)
->* 图片加载库 ![Fresco](http://frescolib.org/docs/index.html)
->* Bootstrap ![](http://frescolib.org/docs/index.html)
->* 下拉加载 ![](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh)
+>* 注解框架 [AndroidAnnonations](http://androidannotations.org/)
+>* 网络访问框架 [Android-async-http](http://loopj.com/android-async-http/)
+>* 图片加载库 [Fresco](http://frescolib.org/docs/index.html)
+>* [Bootstrap](http://frescolib.org/docs/index.html)
+>* 下拉加载 [Pull-To-Refresh](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh)
 
 ## 照片分享的应用
 
