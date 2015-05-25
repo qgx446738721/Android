@@ -5,16 +5,45 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 /**
  * 图像处理库
  * Created by Dog on 2015/5/1.
  */
 public class ImageUtil {
+    /**
+     * 得到指定大小的controller
+     * @param oldController 旧的controller
+     * @param uri 图片资源地址
+     * @param width 期望宽度
+     * @param height 期望高度
+     * @return 带缩放的controller
+     */
+    public static PipelineDraweeController getControllerWithSize(DraweeController oldController,
+                                                                 Uri uri, int width, int height){
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(width, height))
+                .setAutoRotateEnabled(true)
+                .build();
+        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setOldController(oldController)
+                .setImageRequest(imageRequest)
+                .build();
+        return controller;
+    }
+
     /**
      * 模糊图片处理
      * @param in 输入的图片

@@ -55,9 +55,9 @@ public class ArticleItem extends RelativeLayout{
 
     public void bind(final HttpStruct.Article data){
         cf_tv_title.setText(data.title);
-        tv_sub_title.setText(data.subtitle);
-        if(data.image != null){
-            Uri uri = MyApplication.getImageHostUri(data.image);
+        tv_sub_title.setText(data.sub_title);
+        if(data.pic != null){
+            Uri uri = MyApplication.getImageHostUri(data.pic);
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .setResizeOptions(new ResizeOptions(SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()))
                     .build();

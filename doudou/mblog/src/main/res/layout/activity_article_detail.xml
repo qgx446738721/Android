@@ -123,6 +123,27 @@
             </LinearLayout>
 
             <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/article_detail_praise_height">
+
+                <com.beardedhen.androidbootstrap.FontAwesomeText
+                    fontawesometext:fa_icon="fa-heart"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/red"
+                    android:layout_width="@dimen/article_detail_praise_height"
+                    android:layout_height="@dimen/article_detail_praise_height" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_praise"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/article_detail_reply_height"/>
 

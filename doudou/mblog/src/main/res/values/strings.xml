@@ -2,7 +2,11 @@
     <string name="app_name">扁豆</string>
     <string name="open">打开</string>
     <string name="close">关闭</string>
+    <string name="cancel">取消</string>
+    <string name="sure">确定</string>
     <string name="load_more">正在加载</string>
+    <!--图片库选取页面-->
+    <string name="img_lib_chose_folder_title">选取相册</string>
     <!--menu-->
     <string name="menu_add">add new</string>
     <string name="menu_camera">take photo</string>
@@ -16,7 +20,8 @@
     <!--登录选择界面-->
     <string name="login">Sign In</string>
     <string name="register">Create Account</string>
-    <!--登陆界面-->
+    <!--登陆界面--><!--注册界面-->
     <string name="edit_text_email">Your Email Address</string>
     <string name="edit_text_password">Password</string>
+    <string name="edit_text_retry_pass">Password Again</string>
 </resources>

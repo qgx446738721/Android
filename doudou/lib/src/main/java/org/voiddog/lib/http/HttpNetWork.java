@@ -1,12 +1,10 @@
 package org.voiddog.lib.http;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
+import com.google.gson.Gson;
 
 import org.voiddog.lib.BaseApplication;
 
@@ -15,13 +13,12 @@ import org.voiddog.lib.BaseApplication;
  */
 public class HttpNetWork {
     protected static HttpNetWork instance;
-    protected AsyncHttpClient asyncHttpClient;
-    protected PersistentCookieStore persistentCookieStore;
+    RequestQueue mQueue;
+    Gson gson;
 
     protected HttpNetWork(){
-        asyncHttpClient = new AsyncHttpClient();
-        persistentCookieStore = new PersistentCookieStore(BaseApplication.getInstance());
-        asyncHttpClient.setCookieStore(persistentCookieStore);
+        mQueue = Volley.newRequestQueue(BaseApplication.getInstance());
+        gson = new Gson();
     }
 
     public static HttpNetWork getInstance(){
@@ -31,12 +28,36 @@ public class HttpNetWork {
         return instance;
     }
 
-    public void request(DHttpRequestBase requestBase, AsyncHttpResponseHandler responseHandler){
-        if(requestBase.getMethod() == DHttpRequestBase.GET){
-            asyncHttpClient.get(requestBase.getAction(), requestBase.getParams(), responseHandler);
-        }
-        else{
-            asyncHttpClient.post(requestBase.getAction(), requestBase.getParams(), responseHandler);
-        }
+    public void request(final DHttpRequestBase requestBase, final NetResponseCallback netResponseCallback, final NetErrorCallback netErrorCallback){
+        String params = gson.toJson(requestBase);
+        GsonRequest gsonRequest = new GsonRequest(
+                requestBase.getMethod(),
+                requestBase.getHost(),
+                params,
+                new Response.Listener<HttpResponsePacket>() {
+                    @Override
+                    public void onResponse(HttpResponsePacket response) {
+                        netResponseCallback.onResponse(requestBase, response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        netErrorCallback.onError(requestBase, error.getMessage());
+                    }
+                }
+        );
+        mQueue.add(gsonRequest);
+    }
+
+    // 返回回调接口
+    public interface NetResponseCallback {
+        void onResponse(DHttpRequestBase request,
+                               HttpResponsePacket response);
+    }
+
+    // 访问出错的回调接口
+    public interface NetErrorCallback {
+        void onError(DHttpRequestBase request, String errorMsg);
     }
 }

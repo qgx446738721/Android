@@ -2,24 +2,21 @@ package org.voiddog.mblog.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-
-import com.google.gson.reflect.TypeToken;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.voiddog.lib.http.DJsonObjectResponse;
+import org.voiddog.lib.http.DHttpRequestBase;
 import org.voiddog.lib.http.HttpNetWork;
+import org.voiddog.lib.http.HttpResponsePacket;
 import org.voiddog.lib.util.StringUtil;
 import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.http.HttpStruct;
-import org.voiddog.mblog.http.MyHttpRequest;
+import org.voiddog.mblog.http.LoginRequest;
 import org.voiddog.mblog.preference.Config_;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.util.DialogUtil;
@@ -68,44 +65,28 @@ public class LoginActivity extends Activity {
         if(!checkInput(email, password)){
             return;
         }
-        MyHttpRequest.UserLogin userLogin = new MyHttpRequest.UserLogin(email, password);
         final Dialog dialog = DialogUtil.createProgressDialog(LoginActivity.this);
         dialog.show();
         dialog.setCancelable(false);
-        HttpNetWork.getInstance().request(userLogin, new DJsonObjectResponse() {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.email = email;
+        loginRequest.password = password;
+        HttpNetWork.getInstance().request(loginRequest, new HttpNetWork.NetResponseCallback() {
             @Override
-            public void onSuccess(int statusCode, DResponse response) {
+            public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
                 dialog.cancel();
                 if(response.code == 0){
-                    ToastUtil.showToast("login success");
-                    Log.i("TAG", response.data);
-                    try {
-                        HttpStruct.User user = response.getData(new TypeToken<HttpStruct.User>() {
-                        }.getType());
-                        Intent intent = new Intent();
-                        intent.putExtra("uid", user.uid);
-                        intent.putExtra("nickname", user.nickname);
-                        intent.putExtra("head", user.head);
-                        config.edit()
-                                .auto_login().put(true)
-                                .user_name().put(user.nickname)
-                                .head_image().put(user.head).apply();
-                        setResult(LOGIN_SUCCESS, intent);
-                        finish();
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    // TODO 登陆成功后的操作
                 }
                 else{
                     ToastUtil.showToast(response.message);
                 }
             }
-
+        }, new HttpNetWork.NetErrorCallback() {
             @Override
-            public void onFailure(int statusCode, Throwable throwable) {
+            public void onError(DHttpRequestBase request, String errorMsg) {
                 dialog.cancel();
-                ToastUtil.showToast("login failure, network error. error code: " + statusCode);
+                ToastUtil.showToast("登陆失败");
             }
         });
     }

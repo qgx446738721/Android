@@ -3,18 +3,17 @@ package org.voiddog.mblog.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -40,7 +39,6 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
-import org.voiddog.lib.http.DJsonObjectResponse;
 import org.voiddog.lib.util.ImageUtil;
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.lib.util.StringUtil;
@@ -48,9 +46,6 @@ import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.Const;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
-import org.voiddog.mblog.http.HttpStruct;
-import org.voiddog.mblog.http.MyHttpNetWork;
-import org.voiddog.mblog.http.MyHttpRequest;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.util.DialogUtil;
 
@@ -70,6 +65,8 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     TextView tv_content;
     @ViewById
     TextView tv_user_name, tv_time;
+    @ViewById
+    RecyclerView rv_praise;
     @Extra
     int article_id;
     @Extra
@@ -145,46 +142,46 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     }
 
     void loadData(){
-        if(!progressDialog.isShowing()){
-            progressDialog.show();
-        }
-        MyHttpRequest.GetArticle getArticle = new MyHttpRequest.GetArticle(article_id);
-        MyHttpNetWork.getInstance().request(getArticle, new DJsonObjectResponse() {
-            @Override
-            public void onSuccess(int statusCode, DResponse response) {
-                progressDialog.cancel();
-                if (response.code == 0) {
-                    try {
-                        HttpStruct.Article article = response.getData(HttpStruct.Article.class);
-                        tv_content.setText(article.body);
-                        tv_user_name.setText(article.nickname);
-                        tv_time.setText(article.updated_at);
-                        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(MyApplication.getImageHostUri(article.head))
-                                .setResizeOptions(new ResizeOptions(sdv_user_head.getWidth() << 1, sdv_user_head.getHeight() << 1))
-                                .build();
-                        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                                .setOldController(sdv_user_head.getController())
-                                .setImageRequest(request)
-                                .build();
-                        sdv_user_head.setController(controller);
-                        loadImage(article.image);
-                    } catch (Exception ignore) {
-                        ToastUtil.showToast("数据错误");
-                        ArticleDetailActivity.this.finish();
-                    }
-                } else {
-                    ToastUtil.showToast(response.message);
-                    ArticleDetailActivity.this.finish();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Throwable throwable) {
-                progressDialog.cancel();
-                ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
-                ArticleDetailActivity.this.finish();
-            }
-        });
+//        if(!progressDialog.isShowing()){
+//            progressDialog.show();
+//        }
+//        MyHttpRequest.GetArticle getArticle = new MyHttpRequest.GetArticle(article_id);
+//        MyHttpNetWork.getInstance().request(getArticle, new DJsonObjectResponse() {
+//            @Override
+//            public void onSuccess(int statusCode, DResponse response) {
+//                progressDialog.cancel();
+//                if (response.code == 0) {
+//                    try {
+//                        HttpStruct.Article article = response.getData(HttpStruct.Article.class);
+//                        tv_content.setText(article.body);
+//                        tv_user_name.setText(article.nickname);
+//                        tv_time.setText(article.updated_at);
+//                        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(MyApplication.getImageHostUri(article.head))
+//                                .setResizeOptions(new ResizeOptions(sdv_user_head.getWidth() << 1, sdv_user_head.getHeight() << 1))
+//                                .build();
+//                        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+//                                .setOldController(sdv_user_head.getController())
+//                                .setImageRequest(request)
+//                                .build();
+//                        sdv_user_head.setController(controller);
+//                        loadImage(article.image);
+//                    } catch (Exception ignore) {
+//                        ToastUtil.showToast("数据错误");
+//                        ArticleDetailActivity.this.finish();
+//                    }
+//                } else {
+//                    ToastUtil.showToast(response.message);
+//                    ArticleDetailActivity.this.finish();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Throwable throwable) {
+//                progressDialog.cancel();
+//                ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
+//                ArticleDetailActivity.this.finish();
+//            }
+//        });
     }
 
     /**

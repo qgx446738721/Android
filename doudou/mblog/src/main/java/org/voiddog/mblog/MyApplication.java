@@ -21,6 +21,8 @@ public class MyApplication extends BaseApplication {
         instance = this;
         //初始化Fresco图片框架
         Fresco.initialize(getApplicationContext());
+        //初始化tumblr
+
     }
 
     public static MyApplication getInstance(){

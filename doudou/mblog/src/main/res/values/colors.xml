@@ -26,6 +26,11 @@
     <color name="concrete">#95A5A6</color>
     <color name="asbestos">#7F8C8D</color>
     <color name="sliver">#BDC3C7</color>
+    <color name="gray">#aaa</color>
+    <color name="alpha_white">#aaFFFFFF</color>
+    <color name="themeBlue">#43ADF7</color>
+    <color name="tianyiBlue">#66CCFF</color>
+    <color name="picture_no">#444</color>
     <!--主页-->
     <color name="bg">#333</color>
     <color name="main_list_bg">#aa000000</color>
@@ -42,9 +47,12 @@
     <!--article detail-->
     <color name="article_title_bg">#55000000</color>
     <color name="article_content_bg">#55000000</color>
-    <color name="article_bg">#33000000</color>
+    <color name="article_bg">#66000000</color>
     <color name="article_content">#ddd</color>
     <!--chose auth-->
     <color name="chose_login_bg">#77333333</color>
     <color name="chose_register_bg">#773498DB</color>
+    <!--照片选择页面-->
+    <color name="img_foler_list_divide">#3e3e3e</color>
+    <color name="select_lib_abs_view_bg">#3b3b3b</color>
 </resources>

@@ -27,6 +27,8 @@ import org.voiddog.mblog.ui.TitleBar;
  */
 @EActivity(R.layout.active_login_or_register)
 public class LoginOrRegisterActivity extends Activity {
+    final public static int LOGIN_SUCCESS = 1;
+
     @ViewById
     SimpleDraweeView sdv_login_or_register_head;
     @ViewById
@@ -35,6 +37,7 @@ public class LoginOrRegisterActivity extends Activity {
     ImageView iv_blur_bg;
 
     final int REQUEST_LOGIN = 0;
+    final int REQUEST_REGISTER = 1;
 
     @AfterViews
     void init(){
@@ -65,7 +68,7 @@ public class LoginOrRegisterActivity extends Activity {
                 break;
             }
             case R.id.ct_tv_register:{
-                // TODO 注册
+                RegisterActivity_.intent(LoginOrRegisterActivity.this).startForResult(REQUEST_REGISTER);
                 break;
             }
         }
@@ -86,9 +89,21 @@ public class LoginOrRegisterActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_LOGIN && resultCode == LoginActivity.LOGIN_SUCCESS){
-            setResult(resultCode, data);
-            finish();
+        switch (requestCode){
+            case REQUEST_LOGIN:{
+                if(resultCode == LoginActivity.LOGIN_SUCCESS){
+                    setResult(LOGIN_SUCCESS, data);
+                    finish();
+                }
+                break;
+            }
+            case REQUEST_REGISTER:{
+                if(resultCode == RegisterActivity.REGISTER_SUCCESS){
+                    setResult(LOGIN_SUCCESS, data);
+                    finish();
+                }
+                break;
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

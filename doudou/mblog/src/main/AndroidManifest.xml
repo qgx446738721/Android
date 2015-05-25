@@ -37,6 +37,15 @@
         <activity android:name=".activity.LoginActivity_"
             android:screenOrientation="portrait"
             android:label="登录"/>
+        <activity android:name=".activity.RegisterActivity_"
+            android:screenOrientation="portrait"
+            android:label="注册"/>
+        <activity android:name=".activity.ChoseImgFromLibActivity_"
+            android:screenOrientation="portrait"
+            android:label="从相册选取"/>
+        <activity android:name=".activity.PhotoPreviewActivity_"
+            android:screenOrientation="portrait"
+            android:label="预览图片"/>
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"

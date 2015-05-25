@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.drawee.view.SimpleDraweeView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    fresco:fadeDuration="300"
+    fresco:actualImageScaleType="fitCenter"
+    fresco:placeholderImage="@mipmap/pictures_no"
+    fresco:placeholderImageScaleType="center"
+    fresco:failureImage="@mipmap/pictures_no"
+    fresco:failureImageScaleType="center"
+    fresco:progressBarImage="@drawable/horizontal_progress_bar"
+    fresco:progressBarImageScaleType="centerInside"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto" />

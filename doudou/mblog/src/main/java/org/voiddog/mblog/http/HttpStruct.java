@@ -1,41 +1,21 @@
 package org.voiddog.mblog.http;
 
 /**
- * 网络数据格式
+ * 用户返回数据
  * Created by Dog on 2015/4/4.
  */
 public class HttpStruct {
     public class Article{
-        public int id;
-        public int uid;
-        public String head;
-        public String nickname;
-        public String updated_at;
+        public int mid;
+        public String email;
         public String title;
-        public String subtitle;
-        public String body;
-        public String image;
+        public String sub_title;
+        public String content;
+        public String pic;
+        public String create_time;
     }
 
     public class User{
-        public int uid;
-        public String nickname;
-        public String head;
-    }
-
-    public class Card{
-        public int id;
-        public int uid;
-        public String nickname;
-        public String head;
-        public String last_ip;
-    }
-
-    public class Token{
-        public String _token;
-    }
-
-    public class MRTest{
-
+        public String email;    //用户邮箱
     }
 }

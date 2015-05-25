@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <FrameLayout
+        android:id="@+id/fra_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <org.voiddog.mblog.ui.TitleBar_
+        android:id="@+id/title_bar"
+        TitleBar:leftIcon="fa-angle-left"
+        TitleBar:leftText="返回"
+        android:background="@drawable/title_bar_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"/>
+
+</FrameLayout>

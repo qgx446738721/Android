@@ -46,4 +46,15 @@ public class SizeUtil {
         wm.getDefaultDisplay().getMetrics(localDisplayMetrics);
         return localDisplayMetrics;
     }
+
+    /**
+     * 输入dp 转换为 px
+     * @param context 上下文
+     * @param dp 要转换的dp的数值
+     * @return dp 转换成 px 后的数值
+     */
+    public static int dp2px(Context context, float dp){
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
 }

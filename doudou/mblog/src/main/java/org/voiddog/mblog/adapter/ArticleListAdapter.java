@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import org.voiddog.mblog.R;
 import org.voiddog.mblog.http.HttpStruct;
 import org.voiddog.mblog.ui.ArticleItem;
 import org.voiddog.mblog.ui.ArticleItem_;

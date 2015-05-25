@@ -31,6 +31,14 @@ public class FileUtil {
     }
 
     /**
+     * 判断有无外部存储
+     * @return true 存在，false 不存在
+     */
+    public static boolean isExternalStorageExist(){
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    /**
      * 判断SD卡剩余容量，单位MB
      *
      * @return long

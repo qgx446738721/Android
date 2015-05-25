@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.voiddog.mblog.ui.TitleBar_
+        android:id="@+id/title_bar"
+        TitleBar:leftIcon="fa-angle-left"
+        TitleBar:leftText="相册"
+        TitleBar:titleText="选择图片"
+        TitleBar:rightText="取消"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"/>
+
+    <org.voiddog.lib.ui.BounceGridView
+        android:id="@+id/bou_gv_image"
+        android:background="@color/select_lib_abs_view_bg"
+        android:numColumns="4"
+        android:horizontalSpacing="1px"
+        android:listSelector="@color/clouds"
+        android:verticalSpacing="1px"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@color/bg"
+        android:padding="5dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_preview"
+            android:background="@drawable/btn_blue_bg"
+            android:textSize="@dimen/default_text_size"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_height="@dimen/image_select_bottom_height" />
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:textColor="@color/themeBlue"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/default_text_size"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:text="@string/sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</LinearLayout>

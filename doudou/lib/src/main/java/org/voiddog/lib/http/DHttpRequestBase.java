@@ -1,31 +1,18 @@
 package org.voiddog.lib.http;
 
-import com.loopj.android.http.RequestParams;
+import com.android.volley.Request;
 
 /**
  * Created by Dog on 2015/4/4.
  */
-public class DHttpRequestBase {
-    public static final int GET = 0;
-    public static final int POST = 1;
-    protected RequestParams requestParams;
-    protected String action;
-    protected int method;
-    public DHttpRequestBase(String action){
-        this.action = action;
-        method = POST;
-        requestParams = new RequestParams();
-    }
-
+abstract public class DHttpRequestBase {
+    /**
+     * GET 0, POST 1 default POST
+     * @return GET OR POST
+     */
     public int getMethod(){
-        return method;
+        return Request.Method.POST;
     }
 
-    public RequestParams getParams(){
-        return requestParams;
-    }
-
-    public String getAction(){
-        return action;
-    }
+    abstract public String getHost();
 }

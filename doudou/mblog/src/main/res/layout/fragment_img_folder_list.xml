@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.voiddog.mblog.ui.TitleBar_
+        android:id="@+id/title_bar"
+        TitleBar:titleText="@string/img_lib_chose_folder_title"
+        TitleBar:rightText="@string/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"/>
+
+    <org.voiddog.lib.ui.BounceListView
+        android:id="@+id/bou_lv_folder"
+        android:layout_width="match_parent"
+        android:dividerHeight="1px"
+        android:divider="@color/img_foler_list_divide"
+        android:background="@color/select_lib_abs_view_bg"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>

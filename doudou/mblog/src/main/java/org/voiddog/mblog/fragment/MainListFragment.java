@@ -6,22 +6,15 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.gson.reflect.TypeToken;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
-import org.voiddog.lib.http.DJsonObjectResponse;
-import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.activity.ArticleDetailActivity_;
 import org.voiddog.mblog.adapter.ArticleListAdapter;
 import org.voiddog.mblog.http.HttpStruct;
-import org.voiddog.mblog.http.MyHttpNetWork;
-import org.voiddog.mblog.http.MyHttpRequest;
-
-import java.util.List;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -72,10 +65,10 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
 
     @ItemClick(R.id.lv_main)
     void onItemClick(HttpStruct.Article data){
-        ArticleDetailActivity_.intent(context).extra("article_id", data.id)
-                .extra("article_content", data.body)
+        ArticleDetailActivity_.intent(context).extra("article_id", data.mid)
+                .extra("article_content", data.content)
                 .extra("article_title", data.title)
-                .extra("article_subtitle", data.subtitle).start();
+                .extra("article_subtitle", data.sub_title).start();
     }
 
     void setUpPtrFresh(){
@@ -127,43 +120,43 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
         }
         if(!hasMore){ return;}
         foot_view.setText("正在加载");
-        MyHttpRequest.GetArticleList getArticleList = new MyHttpRequest.GetArticleList(currentPage, num);
-        MyHttpNetWork.getInstance().request(getArticleList, new DJsonObjectResponse() {
-            @Override
-            public void onSuccess(int statusCode, DJsonObjectResponse.DResponse response) {
-                ptr_main.refreshComplete();
-                if(response.code == 0) {
-                    ToastUtil.showToast("refresh Complete!");
-                    List<HttpStruct.Article> articleList = response.getData(new TypeToken<List<HttpStruct.Article>>() {}.getType());
-                    if(adapter == null){
-                        adapter = new ArticleListAdapter();
-                    }
-                    if(!isMore){
-                        adapter.clearAll();
-                    }
-                    if(lv_main.getAdapter() != adapter){
-                        lv_main.setAdapter(adapter);
-                    }
-                    adapter.addAll(articleList);
-                    currentPage++;
-                    if (articleList.size() < num){
-                        hasMore = false;
-                        foot_view.setText("没有更多了");
-                    }
-                }
-                else{
-                    ToastUtil.showToast(response.message);
-                    foot_view.setText("加载失败");
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Throwable throwable) {
-                ptr_main.refreshComplete();
-                foot_view.setText("加载失败");
-                ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
-            }
-        });
+//        MyHttpRequest.GetArticleList getArticleList = new MyHttpRequest.GetArticleList(currentPage, num);
+//        MyHttpNetWork.getInstance().request(getArticleList, new DJsonObjectResponse() {
+//            @Override
+//            public void onSuccess(int statusCode, DJsonObjectResponse.DResponse response) {
+//                ptr_main.refreshComplete();
+//                if(response.code == 0) {
+//                    ToastUtil.showToast("refresh Complete!");
+//                    List<HttpStruct.Article> articleList = response.getData(new TypeToken<List<HttpStruct.Article>>() {}.getType());
+//                    if(adapter == null){
+//                        adapter = new ArticleListAdapter();
+//                    }
+//                    if(!isMore){
+//                        adapter.clearAll();
+//                    }
+//                    if(lv_main.getAdapter() != adapter){
+//                        lv_main.setAdapter(adapter);
+//                    }
+//                    adapter.addAll(articleList);
+//                    currentPage++;
+//                    if (articleList.size() < num){
+//                        hasMore = false;
+//                        foot_view.setText("没有更多了");
+//                    }
+//                }
+//                else{
+//                    ToastUtil.showToast(response.message);
+//                    foot_view.setText("加载失败");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Throwable throwable) {
+//                ptr_main.refreshComplete();
+//                foot_view.setText("加载失败");
+//                ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
+//            }
+//        });
     }
 
     /**
