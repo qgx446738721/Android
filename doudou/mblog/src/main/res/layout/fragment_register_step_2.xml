@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:CustomFontTextView="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdv_user_head"
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@color/clouds"
+            fresco:placeholderImageScaleType="fitCenter"
+            android:layout_width="@dimen/register_user_head_size"
+            android:layout_height="@dimen/register_user_head_size"/>
+
+        <org.voiddog.lib.ui.CustomFontEditTextView
+            android:id="@+id/et_user_name"
+            android:textSize="@dimen/register_user_name_text"
+            android:maxLines="1"
+            android:textColor="@color/clouds"
+            android:textColorHint="@color/gray"
+            android:background="@color/transparent"
+            android:textCursorDrawable="@color/clouds"
+            CustomFontTextView:fontFace="fangzhen-liu.ttf"
+            android:hint="@string/register_name_input"
+            android:layout_marginTop="@dimen/register_step_2_divide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:layout_marginTop="@dimen/register_step_2_divide"
+            android:id="@+id/gp_sex_select"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_male"
+                android:button="@drawable/radio_btn"
+                android:paddingStart="5dp"
+                android:paddingEnd="15dp"
+                android:textColor="@color/clouds"
+                android:textSize="@dimen/default_text_size"
+                android:text="@string/male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/rb_female"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:button="@drawable/radio_btn"
+                android:textColor="@color/clouds"
+                android:textSize="@dimen/default_text_size"
+                android:text="@string/female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <org.voiddog.mblog.ui.TitleBar_
+        android:id="@+id/title_bar"
+        TitleBar:leftIcon="fa-arrow-left"
+        TitleBar:rightText="Go"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"/>
+
+</RelativeLayout>

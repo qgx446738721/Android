@@ -49,6 +49,9 @@
         <activity android:name=".activity.UserBlogActivity_"
             android:screenOrientation="portrait"
             android:label="用户详情"/>
+        <activity android:name=".activity.CropActivity_"
+            android:screenOrientation="portrait"
+            android:label="图像截取"/>
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"

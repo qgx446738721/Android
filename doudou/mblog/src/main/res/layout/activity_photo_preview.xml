@@ -14,7 +14,7 @@
         android:id="@+id/title_bar"
         TitleBar:leftIcon="fa-angle-left"
         TitleBar:leftText="返回"
-        android:background="@drawable/title_bar_bg"
+        TitleBar:titleBg="@drawable/title_bar_bg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"/>
 

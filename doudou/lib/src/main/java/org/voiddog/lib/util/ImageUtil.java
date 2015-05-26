@@ -2,9 +2,12 @@ package org.voiddog.lib.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
@@ -17,6 +20,9 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * 图像处理库
@@ -42,6 +48,113 @@ public class ImageUtil {
                 .setImageRequest(imageRequest)
                 .build();
         return controller;
+    }
+
+    /**
+     * 获取本地图片
+     * @param filePath 图片路径
+     * @param maxWidth 最大宽度
+     * @param maxHeight 最大高度
+     * @return 图片bitmap 找不到为null
+     */
+    public static Bitmap getLocalBitmap(String filePath, int maxWidth, int maxHeight){
+        Bitmap bitmap = null;
+        try{
+            File file = new File(filePath);
+            int degree = ImageUtil.readPictureDegree(filePath);
+            if(file.exists()){
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(filePath, options);
+                options.inSampleSize = calculateSimpleSize(options.outWidth, options.outHeight, maxWidth, maxHeight);
+                options.inJustDecodeBounds = false;
+                bitmap = BitmapFactory.decodeFile(filePath, options);
+                if(degree != 0){
+                    Bitmap bmp = bitmap;
+                    bitmap = rotaingImageView(degree, bitmap);
+                    bmp.recycle();
+                }
+            }
+        }
+        catch (OutOfMemoryError e){
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public static int calculateSimpleSize(int srcWidth, int srcHeight,
+                                          int reqWidth, int reqHeight){
+        int inSampleSize = 1;
+
+        if (srcHeight > reqHeight || srcWidth > reqWidth) {
+            float scaleW = (float) srcWidth / (float) reqWidth;
+            float scaleH = (float) srcHeight / (float) reqHeight;
+
+            float sample = scaleW > scaleH ? scaleW : scaleH;
+            // 只能是2的次幂
+            if (sample < 3)
+                inSampleSize = (int) sample;
+            else if (sample < 6.5)
+                inSampleSize = 4;
+            else if (sample < 8)
+                inSampleSize = 8;
+            else
+                inSampleSize = (int) sample;
+
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * 旋转图片
+     *
+     * @param angle 旋转角度
+     * @param bitmap 需要旋转的图片
+     * @return Bitmap
+     */
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        try {
+            // 旋转图片 动作
+            Matrix matrix = new Matrix();
+            matrix.postRotate(angle);
+            // 创建新的图片
+            return Bitmap.createBitmap(bitmap, 0, 0,
+                    bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 读取图片属性：旋转的角度
+     *
+     * @param path
+     *            图片绝对路径
+     * @return degree 旋转的角度
+     */
+    public static int readPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 
     /**

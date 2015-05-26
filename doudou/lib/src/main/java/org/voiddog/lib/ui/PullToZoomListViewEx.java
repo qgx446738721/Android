@@ -27,12 +27,12 @@ import android.widget.ListView;
  * Why & What is modified:
  */
 public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements AbsListView.OnScrollListener {
-    private static final String TAG = PullToZoomListViewEx.class.getSimpleName();
-    private FrameLayout mHeaderContainer;
-    private int mHeaderHeight;
-    private ScalingRunnable mScalingRunnable;
+    protected static final String TAG = PullToZoomListViewEx.class.getSimpleName();
+    protected FrameLayout mHeaderContainer;
+    protected int mHeaderHeight;
+    protected ScalingRunnable mScalingRunnable;
 
-    private static final Interpolator sInterpolator = new Interpolator() {
+    protected static final Interpolator sInterpolator = new Interpolator() {
         public float getInterpolation(float paramAnonymousFloat) {
             float f = paramAnonymousFloat - 1.0F;
             return 1.0F + f * (f * (f * (f * f)));

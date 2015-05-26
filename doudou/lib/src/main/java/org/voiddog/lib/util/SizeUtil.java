@@ -40,8 +40,14 @@ public class SizeUtil {
     }
 
     public static DisplayMetrics getLocalDisplayMetrics(){
-        WindowManager wm = (WindowManager) BaseApplication.getInstance()
-                .getSystemService(Context.WINDOW_SERVICE);
+        return getLocalDisplayMetrics(BaseApplication.getInstance());
+    }
+
+    public static DisplayMetrics getLocalDisplayMetrics(Context context){
+        if(displayMetrics != null){
+            return displayMetrics;
+        }
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(localDisplayMetrics);
         return localDisplayMetrics;

@@ -6,12 +6,7 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
@@ -20,7 +15,8 @@ import org.voiddog.lib.ui.CustomFontTextView;
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
-import org.voiddog.mblog.http.HttpStruct;
+import org.voiddog.mblog.data.ArticleData;
+import org.voiddog.mblog.util.DDImageUtil;
 
 /**
  * 主页文章item view
@@ -53,19 +49,14 @@ public class ArticleItem extends RelativeLayout{
         sdv_card_head.setAspectRatio(2f);
     }
 
-    public void bind(final HttpStruct.Article data){
+    public void bind(final ArticleData data){
         cf_tv_title.setText(data.title);
         tv_sub_title.setText(data.sub_title);
         if(data.pic != null){
             Uri uri = MyApplication.getImageHostUri(data.pic);
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                    .setResizeOptions(new ResizeOptions(SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()))
-                    .build();
-            PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                    .setOldController(sdv_card_head.getController())
-                    .setImageRequest(request)
-                    .build();
-            sdv_card_head.setController(controller);
+            sdv_card_head.setController(DDImageUtil.getControllerWithSize(
+                    sdv_card_head.getController(), uri, SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()
+            ));
         }
     }
 }

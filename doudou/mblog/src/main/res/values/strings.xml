@@ -5,8 +5,13 @@
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
     <string name="load_more">正在加载</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
     <!--图片库选取页面-->
-    <string name="img_lib_chose_folder_title">选取相册</string>
+    <string name="img_lib_chose_folder_title">选择图片</string>
+    <!--选择来源dialog-->
+    <string name="take_photo">拍照</string>
+    <string name="chose_library">从手机相册选取</string>
     <!--menu-->
     <string name="menu_add">add new</string>
     <string name="menu_camera">take photo</string>
@@ -21,7 +26,8 @@
     <string name="login">Sign In</string>
     <string name="register">Create Account</string>
     <!--登陆界面--><!--注册界面-->
-    <string name="edit_text_email">Your Email Address</string>
-    <string name="edit_text_password">Password</string>
-    <string name="edit_text_retry_pass">Password Again</string>
+    <string name="edit_text_email">请输入邮箱地址</string>
+    <string name="edit_text_password">请输入密码</string>
+    <string name="edit_text_retry_pass">请再次输入密码</string>
+    <string name="register_name_input">Your Name</string>
 </resources>

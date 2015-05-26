@@ -45,7 +45,6 @@ public class GsonRequest extends Request<HttpResponsePacket> {
 		try {
 			String jsonString = new String(response.data,
 					HttpHeaderParser.parseCharset(response.headers));
-			Log.i("TAG", jsonString);
 			return Response.success(mGson.fromJson(jsonString, HttpResponsePacket.class),
 					HttpHeaderParser.parseCacheHeaders(response));
 		} catch (UnsupportedEncodingException e) {

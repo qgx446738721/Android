@@ -11,6 +11,8 @@ public class Const {
     public static String IMG_HOST = "http://120.26.120.73/doudou/Uploads/";
     public static int MALE = 0;
     public static int FEMALE = 1;
+    //图片上传尺寸
+    public static int MAX_SIZE = 600;
 
 
     //微博app key

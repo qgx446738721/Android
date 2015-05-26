@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TitleBar="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.voiddog.mblog.ui.TitleBar_
+        android:id="@+id/title_bar"
+        TitleBar:leftIcon="fa-close"
+        TitleBar:titleText="裁剪图像"
+        TitleBar:rightText="确定"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"/>
+
+    <org.voiddog.mblog.ui.ClipImageLayout
+        android:id="@+id/cil_crop"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>

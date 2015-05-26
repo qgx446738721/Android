@@ -39,6 +39,7 @@ import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.fragment.MainListFragment_;
 import org.voiddog.mblog.preference.Config_;
+import org.voiddog.mblog.util.DDImageUtil;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.menu_main)
@@ -67,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
     //判断用户是否登录
     boolean isUserLogin = false;
 
-    Bitmap testBitmap = null;
-
     @AfterViews
     void init(){
         //一体化色彩
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         mainActivity = this;
 
-        tool_bar.setTitle("主页");
+        tool_bar.setTitle("Home");
         tool_bar.setTitleTextColor(getResources().getColor(R.color.title_text));
         setSupportActionBar(tool_bar);
         if(getSupportActionBar() != null) {
@@ -143,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OptionsItem(R.id.menu_camera)
     void onTakePhoto(){
-        // TODO 拍照片
+        UserBlogActivity_.intent(this)
+                .extra("tEmail", "634771197@qq.com")
+                .start();
     }
 
     @OptionsItem(R.id.menu_chose)
@@ -173,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
      * 登出操作
      */
     void logout(){
-        // TODO logout
+        config.clear();
+        clearInfo();
+        isUserLogin = false;
     }
 
     /**
@@ -219,24 +222,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void process(Bitmap bitmap) {
-                testBitmap = bitmap;
                 startBlur(bitmap);
             }
         };
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()))
-                .setPostprocessor(postprocessor)
-                .build();
-        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setOldController(sdv_iv_user_head.getController())
-                .build();
-        sdv_iv_user_head.setController(controller);
+        int size = getResources().getDimensionPixelSize(R.dimen.main_menu_head_img_size);
+        sdv_iv_user_head.setController(
+                DDImageUtil.getControllerBySize(sdv_iv_user_head, uri, size, size, postprocessor)
+        );
     }
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 8, 4);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 2, 8);
         applyBlur(newBitmap);
     }
 

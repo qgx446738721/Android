@@ -23,7 +23,9 @@ public abstract class DJsonObjectResponse extends BaseJsonHttpResponseHandler<JS
             this.response = new DResponse();
             this.response.message = response.getString("message");
             this.response.code = response.getInt("code");
-            this.response.data = response.getString("data");
+            if(response.has("data")) {
+                this.response.data = response.getString("data");
+            }
             onSuccess(statusCode, this.response);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -48,7 +50,7 @@ public abstract class DJsonObjectResponse extends BaseJsonHttpResponseHandler<JS
         private static Gson gson = new Gson();
         public int code;
         public String message;
-        public String data;
+        public String data = "";
 
         public <T> T getData(Type type) {
             try {

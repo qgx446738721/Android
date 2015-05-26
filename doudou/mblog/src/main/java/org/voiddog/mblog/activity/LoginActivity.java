@@ -18,7 +18,7 @@ import org.voiddog.lib.http.HttpResponsePacket;
 import org.voiddog.lib.util.StringUtil;
 import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.R;
-import org.voiddog.mblog.http.HttpStruct;
+import org.voiddog.mblog.data.UserData;
 import org.voiddog.mblog.http.LoginRequest;
 import org.voiddog.mblog.preference.Config_;
 import org.voiddog.mblog.ui.TitleBar;
@@ -79,8 +79,8 @@ public class LoginActivity extends Activity {
             public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
                 dialog.cancel();
                 if(response.code == 0){
-                    HttpStruct.User user = response.getData(
-                            new TypeToken<HttpStruct.User>(){}.getType()
+                    UserData user = response.getData(
+                            new TypeToken<UserData>(){}.getType()
                     );
                     config.edit()
                             .email().put(user.email)

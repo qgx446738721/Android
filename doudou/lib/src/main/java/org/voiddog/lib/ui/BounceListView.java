@@ -38,7 +38,7 @@ public class BounceListView extends ListView {
     private void initBounceListView(){
         //get the density of the screen and do some maths with it on the max overscroll distance
         //variable so that you get similar behaviors no matter what the screen size
-        final float density = SizeUtil.getLocalDisplayMetrics().density;
+        final float density = SizeUtil.getLocalDisplayMetrics(mContext).density;
 
         mMaxYOverscrollDistance = (int) (density * MAX_Y_OVERSCROLL_DISTANCE);
     }

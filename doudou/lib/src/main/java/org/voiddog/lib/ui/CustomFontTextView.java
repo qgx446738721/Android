@@ -2,12 +2,11 @@ package org.voiddog.lib.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.voiddog.lib.R;
+import org.voiddog.lib.util.FontUtil;
 
 /**
  * 自定义字体
@@ -45,8 +44,7 @@ public class CustomFontTextView extends TextView{
             return;
         }
         try {
-            Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + name);
-            setTypeface(typeface);
+            setTypeface(FontUtil.getFontFace(context.getAssets(), "fonts/" + name));
         } catch (Exception ignore){}
     }
 }

@@ -12,7 +12,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.mblog.R;
-import org.voiddog.mblog.http.HttpStruct;
+import org.voiddog.mblog.data.UserData;
 
 import java.util.List;
 
@@ -21,11 +21,11 @@ import java.util.List;
  * Created by Dog on 2015/5/25.
  */
 public class PraiseUserRecycleAdapter extends RecyclerView.Adapter<PraiseUserRecycleAdapter.ViewHolder>{
-    List<HttpStruct.User> userList;
+    List<UserData> userList;
 
     public PraiseUserRecycleAdapter(){}
 
-    public void setUserMobile(List<HttpStruct.User> userList){
+    public void setUserMobile(List<UserData> userList){
         this.userList = userList;
         notifyDataSetChanged();
     }

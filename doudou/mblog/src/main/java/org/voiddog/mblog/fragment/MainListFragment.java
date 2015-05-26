@@ -14,7 +14,7 @@ import org.androidannotations.annotations.ViewById;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.activity.ArticleDetailActivity_;
 import org.voiddog.mblog.adapter.ArticleListAdapter;
-import org.voiddog.mblog.http.HttpStruct;
+import org.voiddog.mblog.data.ArticleData;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -64,11 +64,13 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     @ItemClick(R.id.lv_main)
-    void onItemClick(HttpStruct.Article data){
-        ArticleDetailActivity_.intent(context).extra("article_id", data.mid)
-                .extra("article_content", data.content)
-                .extra("article_title", data.title)
-                .extra("article_subtitle", data.sub_title).start();
+    void onItemClick(ArticleData data){
+        if(data != null) {
+            ArticleDetailActivity_.intent(context).extra("article_id", data.mid)
+                    .extra("article_content", data.content)
+                    .extra("article_title", data.title)
+                    .extra("article_subtitle", data.sub_title).start();
+        }
     }
 
     void setUpPtrFresh(){

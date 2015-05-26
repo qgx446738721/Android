@@ -15,6 +15,18 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_top</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_to_top</item>
     </style>
+    <style name="ScaleStyle">
+        <item name="android:windowEnterAnimation">@anim/scale_in</item>
+        <item name="android:windowExitAnimation">@anim/scale_out</item>
+    </style>
+    <style name="DefaultDialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/ScaleStyle</item>
+    </style>
     <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/title_left_icon</item>
     </style>
@@ -24,6 +36,14 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@drawable/dialog_progress_bg</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <!--拍照或者选择图片dialog-->
+    <style name="SlideBottom">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_bottom_slow</item>
+    </style>
+    <style name="TakeOrChoseDialog" parent="DefaultDialogStyle">
+        <item name="android:windowAnimationStyle">@style/SlideBottom</item>
     </style>
     <!--主页菜单栏-->
     <style name="MainMenuList">

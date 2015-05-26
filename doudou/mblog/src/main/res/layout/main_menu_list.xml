@@ -30,17 +30,15 @@
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/sdv_iv_user_head"
-                fresco:failureImage="@mipmap/no_head"
-                fresco:failureImageScaleType="centerCrop"
-                fresco:placeholderImage="@mipmap/no_head"
-                fresco:placeholderImageScaleType="centerCrop"
                 fresco:roundAsCircle="true"
+                fresco:placeholderImage="@mipmap/no_head"
+                fresco:placeholderImageScaleType="fitCenter"
                 android:layout_width="@dimen/main_menu_head_img_size"
                 android:layout_height="@dimen/main_menu_head_img_size" />
 
             <org.voiddog.lib.ui.CustomFontTextView
                 android:id="@+id/ct_tv_user_name"
-                CustomFont:fontFace="Roboto-Light.ttf"
+                CustomFont:fontFace="fangzhen-liu.ttf"
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_weight="1"

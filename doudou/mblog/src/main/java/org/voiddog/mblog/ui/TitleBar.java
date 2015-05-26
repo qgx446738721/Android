@@ -54,7 +54,7 @@ public class TitleBar extends FrameLayout{
         rightIcon = a.getString(R.styleable.TitleBar_rightIcon);
         rightText = a.getString(R.styleable.TitleBar_rightText);
 
-        bg = a.getColor(R.styleable.TitleBar_titleBg, getResources().getColor(R.color.bg));
+        bg = a.getResourceId(R.styleable.TitleBar_titleBg, R.color.bg);
         title = a.getString(R.styleable.TitleBar_titleText);
         titleColor = a.getColor(R.styleable.TitleBar_titleColor, 0xffffffff);
 
@@ -77,7 +77,7 @@ public class TitleBar extends FrameLayout{
         //中间
         tv_title.setTextColor(titleColor);
         tv_title.setText(title);
-        setBackgroundColor(bg);
+        setBackgroundResource(bg);
 
         //右边
         fat_right_icon.setTextColor(rightIconColor);
@@ -139,8 +139,13 @@ public class TitleBar extends FrameLayout{
      *             例: fa-arrow-left
      */
     public void setRightIcon(String icon){
-        fat_right_icon.setVisibility(VISIBLE);
-        fat_right_icon.setIcon(icon);
+        if(icon == null){
+            fat_right_icon.setVisibility(GONE);
+        }
+        else {
+            fat_right_icon.setVisibility(VISIBLE);
+            fat_right_icon.setIcon(icon);
+        }
     }
 
     /**

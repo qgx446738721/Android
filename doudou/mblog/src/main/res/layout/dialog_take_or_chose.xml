@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        android:background="@drawable/btn_white_bg"
+        android:id="@+id/btn_take_photo"
+        android:text="@string/take_photo"
+        android:textSize="@dimen/title_size"
+        android:textColor="@color/themeBlue"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_chose_from_library"
+        android:background="@drawable/btn_white_bg"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/default_text_size"
+        android:text="@string/chose_library"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</merge>

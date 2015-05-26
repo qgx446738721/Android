@@ -45,4 +45,5 @@ dependencies {
     compile project(':lib')
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile 'com.j256.ormlite:ormlite-android:4.48'
 }
