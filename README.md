@@ -34,3 +34,5 @@
 ![](https://github.com/qgx446738721/Android/blob/master/art/loagin.jpg?raw=true)
 
 ###至`2015-5-5` 可以分享到微博
+
+###至`2015-5-27` 完成注册，图片选择，裁剪，压缩post。个人信息页头部
