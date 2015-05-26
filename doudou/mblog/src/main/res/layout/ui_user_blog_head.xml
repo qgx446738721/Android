@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CustomFontTextView="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/user_info_head_height">
+    
+    <ImageView
+        android:id="@+id/iv_blur_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:src="@color/user_info_head_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdv_user_head"
+            fresco:roundAsCircle="true"
+            fresco:placeholderImage="@color/clouds"
+            fresco:placeholderImageScaleType="fitCenter"
+            android:layout_width="@dimen/user_head_size"
+            android:layout_height="@dimen/user_head_size" />
+
+        <org.voiddog.lib.ui.CustomFontTextView
+            android:id="@+id/cf_tv_user_name"
+            CustomFontTextView:fontFace="fangzhen-liu.ttf"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="@dimen/user_info_head_text_size"
+            android:padding="@dimen/user_info_head_divide"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>

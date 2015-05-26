@@ -1,6 +1,7 @@
 package org.voiddog.mblog.preference;
 
 import org.androidannotations.annotations.sharedpreferences.DefaultBoolean;
+import org.androidannotations.annotations.sharedpreferences.DefaultInt;
 import org.androidannotations.annotations.sharedpreferences.DefaultString;
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 
@@ -10,13 +11,18 @@ import org.androidannotations.annotations.sharedpreferences.SharedPref;
  */
 @SharedPref(value=SharedPref.Scope.UNIQUE)
 public interface Config {
+    String email();
     @DefaultString("NO NAME")
-    String user_name();
-    @DefaultString("男")
-    String sex();
+    String nickname();
+    @DefaultInt(0)
+    int sex();
     @DefaultString("")
-    String head_image();
-    String _token();
+    String head();
+    @DefaultInt(0)
+    int moving_num();
+    @DefaultInt(0)
+    int updata_time();
+
     @DefaultBoolean(false)
     boolean auto_login();
 }

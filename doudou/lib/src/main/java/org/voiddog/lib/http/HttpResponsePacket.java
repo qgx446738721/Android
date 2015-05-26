@@ -6,9 +6,9 @@ import com.google.gson.Gson;
 
 public class HttpResponsePacket {
 	private static final Gson gson = new Gson();
-	public int code;
-	public String message;
-	public String data;
+	public int code = -1;
+	public String message = "";
+	public String data = "";
 
 	public <T> T getData(Type type) {
 		try {

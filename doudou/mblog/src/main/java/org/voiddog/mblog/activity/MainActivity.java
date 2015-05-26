@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isAutoLogin = config.auto_login().get();
         if(isAutoLogin) {
             isUserLogin = true;
-            loadProfile(config.head_image().get(), config.user_name().get());
+            loadProfile(config.head().get(), config.nickname().get());
         }
         else{
             isUserLogin = false;

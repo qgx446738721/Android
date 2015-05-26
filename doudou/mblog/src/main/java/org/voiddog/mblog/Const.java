@@ -8,7 +8,9 @@ public class Const {
     //主机host
     public static String HOST = "http://120.26.120.73/doudou/index.php/mobile/";
     //图片host
-    public static String IMG_HOST = "http://voiddog.vicp.cc:8008/blog/public/photo/";
+    public static String IMG_HOST = "http://120.26.120.73/doudou/Uploads/";
+    public static int MALE = 0;
+    public static int FEMALE = 1;
 
 
     //微博app key

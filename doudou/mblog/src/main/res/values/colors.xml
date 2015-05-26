@@ -55,4 +55,6 @@
     <!--照片选择页面-->
     <color name="img_foler_list_divide">#3e3e3e</color>
     <color name="select_lib_abs_view_bg">#3b3b3b</color>
+    <!--个人信息页-->
+    <color name="user_info_head_bg">#55000000</color>
 </resources>

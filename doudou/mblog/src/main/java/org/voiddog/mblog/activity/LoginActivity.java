@@ -2,8 +2,11 @@ package org.voiddog.mblog.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
+
+import com.google.gson.reflect.TypeToken;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -76,7 +79,22 @@ public class LoginActivity extends Activity {
             public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
                 dialog.cancel();
                 if(response.code == 0){
-                    // TODO 登陆成功后的操作
+                    HttpStruct.User user = response.getData(
+                            new TypeToken<HttpStruct.User>(){}.getType()
+                    );
+                    config.edit()
+                            .email().put(user.email)
+                            .head().put(user.head)
+                            .moving_num().put(user.moving_num)
+                            .nickname().put(user.nickname)
+                            .sex().put(user.sex)
+                            .auto_login().put(true)
+                            .apply();
+                    Intent intent = new Intent();
+                    intent.putExtra("head", user.head);
+                    intent.putExtra("nickname", user.nickname);
+                    setResult(LOGIN_SUCCESS, intent);
+                    finish();
                 }
                 else{
                     ToastUtil.showToast(response.message);
