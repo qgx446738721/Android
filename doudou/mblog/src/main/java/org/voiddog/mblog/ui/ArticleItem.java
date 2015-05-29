@@ -26,11 +26,13 @@ import org.voiddog.mblog.util.DDImageUtil;
 public class ArticleItem extends RelativeLayout{
 
     @ViewById
-    SimpleDraweeView sdv_card_head;
+    SimpleDraweeView sdv_card_head, sdv_user_head;
     @ViewById
-    TextView tv_sub_title;
+    TextView tv_sub_title, tv_praise_num, tv_comment_num;
     @ViewById
     CustomFontTextView cf_tv_title;
+
+    int headSize;
 
     public ArticleItem(Context context) {
         super(context);
@@ -46,16 +48,22 @@ public class ArticleItem extends RelativeLayout{
 
     @AfterViews
     void init(){
-        sdv_card_head.setAspectRatio(2f);
+        headSize = getResources().getDimensionPixelSize(R.dimen.article_item_head_size);
     }
 
     public void bind(final ArticleData data){
         cf_tv_title.setText(data.title);
         tv_sub_title.setText(data.sub_title);
+        tv_praise_num.setText(Integer.toString(data.praise_num));
+        tv_comment_num.setText(Integer.toString(data.comment_num));
         if(data.pic != null){
             Uri uri = MyApplication.getImageHostUri(data.pic);
             sdv_card_head.setController(DDImageUtil.getControllerWithSize(
                     sdv_card_head.getController(), uri, SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()
+            ));
+            uri = MyApplication.getImageHostUri(data.head);
+            sdv_user_head.setController(DDImageUtil.getControllerWithSize(
+                    sdv_user_head.getController(), uri, headSize, headSize
             ));
         }
     }

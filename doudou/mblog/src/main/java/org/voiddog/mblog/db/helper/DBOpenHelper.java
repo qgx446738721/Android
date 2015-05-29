@@ -31,7 +31,7 @@ public class DBOpenHelper extends OrmLiteSqliteOpenHelper {
     }
 
     public DBOpenHelper(Context context, String dbname) {
-        super(context, dbname, null, 2);
+        super(context, dbname, null, 3);
         onCreate(getReadableDatabase(), connectionSource);
         instance = this;
     }

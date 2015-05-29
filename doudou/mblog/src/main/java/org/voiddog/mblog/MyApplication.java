@@ -6,6 +6,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 
 import org.androidannotations.annotations.EApplication;
 import org.voiddog.lib.BaseApplication;
+import org.voiddog.mblog.db.helper.DBOpenHelper;
 
 /**
  * 主app
@@ -21,8 +22,7 @@ public class MyApplication extends BaseApplication {
         instance = this;
         //初始化Fresco图片框架
         Fresco.initialize(getApplicationContext());
-        //初始化tumblr
-
+        new DBOpenHelper(getApplicationContext(), "voiddog");
     }
 
     public static MyApplication getInstance(){

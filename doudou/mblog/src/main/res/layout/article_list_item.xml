@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:CustomFontTextView="http://schemas.android.com/apk/res-auto"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:fontawesometext="http://schemas.android.com/apk/res-auto">
     <FrameLayout
         android:id="@+id/fl_card_img"
         android:layout_width="match_parent"
@@ -13,7 +14,7 @@
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/sdv_card_head"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/article_item_height"
             android:scaleType="centerCrop"
             fresco:placeholderImageScaleType="fitXY"
             android:contentDescription="原图" />
@@ -24,6 +25,19 @@
             android:background="@drawable/card_black_img_bg"
             android:contentDescription="蒙版图" />
     </FrameLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sdv_user_head"
+        android:layout_width="@dimen/article_item_head_size"
+        android:layout_height="@dimen/article_item_head_size"
+        android:layout_margin="@dimen/article_item_padding"
+        android:scaleType="centerCrop"
+        fresco:placeholderImage="@color/clouds"
+        fresco:roundAsCircle="true"
+        fresco:roundingBorderWidth="2dp"
+        fresco:roundingBorderColor="@color/alpha_white"
+        fresco:placeholderImageScaleType="fitXY"/>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -49,4 +63,46 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.beardedhen.androidbootstrap.FontAwesomeText
+            android:gravity="end"
+            android:textSize="@dimen/article_item_icon_size"
+            android:textColor="@color/clouds"
+            android:padding="@dimen/article_item_padding"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            fontawesometext:fa_icon="fa-heart"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_praise_num"
+            android:textColor="@color/clouds"
+            android:padding="@dimen/article_item_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.beardedhen.androidbootstrap.FontAwesomeText
+            android:gravity="end"
+            android:textSize="@dimen/article_item_icon_size"
+            android:textColor="@color/clouds"
+            android:padding="@dimen/article_item_padding"
+            android:layout_width="wrap_content"
+            fontawesometext:fa_icon="fa-comment"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_comment_num"
+            android:textColor="@color/clouds"
+            android:padding="@dimen/article_item_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 </FrameLayout>

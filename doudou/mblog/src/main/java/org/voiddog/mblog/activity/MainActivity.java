@@ -14,13 +14,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.BasePostprocessor;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.imagepipeline.request.Postprocessor;
 
 import org.androidannotations.annotations.AfterViews;
@@ -34,7 +29,6 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.voiddog.lib.ui.CustomFontTextView;
 import org.voiddog.lib.util.ImageUtil;
-import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.fragment.MainListFragment_;
@@ -126,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case R.id.ct_tv_settings:{
+                if(config.email().exists()) {
+                    UserBlogActivity_.intent(this)
+                            .tEmail(config.email().get())
+                            .start();
+                }
                 break;
             }
             case R.id.ct_tv_auth:{
@@ -142,16 +141,12 @@ public class MainActivity extends AppCompatActivity {
 
     @OptionsItem(R.id.menu_camera)
     void onTakePhoto(){
-        UserBlogActivity_.intent(this)
-                .extra("tEmail", "634771197@qq.com")
-                .start();
+
     }
 
     @OptionsItem(R.id.menu_chose)
     void onChoseFromLibrary(){
-        ChoseImgFromLibActivity_.intent(this)
-                .extra("maxChoseNumber", 1)
-                .startForResult(REQUEST_UPLOAD);
+        PublishMovingActivity_.intent(this).start();
     }
 
     void activeView(View view){

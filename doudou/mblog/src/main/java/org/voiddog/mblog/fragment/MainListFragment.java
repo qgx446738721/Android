@@ -7,14 +7,25 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.voiddog.lib.http.DHttpRequestBase;
+import org.voiddog.lib.http.HttpNetWork;
+import org.voiddog.lib.http.HttpResponsePacket;
+import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.activity.ArticleDetailActivity_;
 import org.voiddog.mblog.adapter.ArticleListAdapter;
 import org.voiddog.mblog.data.ArticleData;
+import org.voiddog.mblog.http.GetAllMovingRequest;
+import org.voiddog.mblog.preference.Config_;
+
+import java.util.List;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -35,6 +46,8 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     ListView lv_main;
     @ViewById
     PtrFrameLayout ptr_main;
+    @Pref
+    Config_ config;
 
     //底部加载更多的view
     private TextView foot_view;
@@ -42,7 +55,7 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     /**
      * 数据区
      */
-    private int currentPage = 1, num = 10;
+    GetAllMovingRequest movingRequest = new GetAllMovingRequest();
     private boolean hasMore = true;
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     Context context;
@@ -58,6 +71,9 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     @AfterViews
     void init(){
         context = getActivity();
+        movingRequest.email = config.email().getOr("634771197@qq.com");
+        adapter = new ArticleListAdapter();
+
         setUpFootAndHeadView();
         setUpPtrFresh();
         setUpListView();
@@ -103,8 +119,7 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
         headView.setPadding(0, context.getResources().getDimensionPixelSize(R.dimen.title_height)
                 - PtrLocalDisplay.dp2px(15), 0, 0);
         lv_main.addHeaderView(headView);
-        ArticleListAdapter tmpAdapter = new ArticleListAdapter(null);
-        lv_main.setAdapter(tmpAdapter);
+        lv_main.setAdapter(adapter);
     }
 
     void setUpListView(){
@@ -117,48 +132,44 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
      */
     void loadListData(final boolean isMore){
         if(!isMore){
-            currentPage = 0;
+            movingRequest.page = 0;
             hasMore = true;
         }
         if(!hasMore){ return;}
         foot_view.setText("正在加载");
-//        MyHttpRequest.GetArticleList getArticleList = new MyHttpRequest.GetArticleList(currentPage, num);
-//        MyHttpNetWork.getInstance().request(getArticleList, new DJsonObjectResponse() {
-//            @Override
-//            public void onSuccess(int statusCode, DJsonObjectResponse.DResponse response) {
-//                ptr_main.refreshComplete();
-//                if(response.code == 0) {
-//                    ToastUtil.showToast("refresh Complete!");
-//                    List<HttpStruct.Article> articleList = response.getData(new TypeToken<List<HttpStruct.Article>>() {}.getType());
-//                    if(adapter == null){
-//                        adapter = new ArticleListAdapter();
-//                    }
-//                    if(!isMore){
-//                        adapter.clearAll();
-//                    }
-//                    if(lv_main.getAdapter() != adapter){
-//                        lv_main.setAdapter(adapter);
-//                    }
-//                    adapter.addAll(articleList);
-//                    currentPage++;
-//                    if (articleList.size() < num){
-//                        hasMore = false;
-//                        foot_view.setText("没有更多了");
-//                    }
-//                }
-//                else{
-//                    ToastUtil.showToast(response.message);
-//                    foot_view.setText("加载失败");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Throwable throwable) {
-//                ptr_main.refreshComplete();
-//                foot_view.setText("加载失败");
-//                ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
-//            }
-//        });
+        HttpNetWork.getInstance().request(movingRequest, new HttpNetWork.NetResponseCallback() {
+            @Override
+            public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                ptr_main.refreshComplete();
+                if(response.code == 0){
+                    List<ArticleData> articleDataList = response.getData(
+                            new TypeToken<List<ArticleData>>(){}.getType()
+                    );
+                    if(!isMore){
+                        adapter.clearAll();
+                    }
+                    adapter.addAll(articleDataList);
+                    if(hasMore){
+                        movingRequest.page++;
+                    }
+                    if(articleDataList.size() < movingRequest.num){
+                        hasMore = false;
+                        foot_view.setText("没有更多了");
+                    }
+                }
+                else{
+                    ToastUtil.showToast(response.message);
+                    foot_view.setText("加载失败");
+                }
+            }
+        }, new HttpNetWork.NetErrorCallback() {
+            @Override
+            public void onError(DHttpRequestBase request, String errorMsg) {
+                ptr_main.refreshComplete();
+                foot_view.setText("加载失败");
+                ToastUtil.showToast("网络或服务器错误");
+            }
+        });
     }
 
     /**

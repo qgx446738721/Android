@@ -24,6 +24,8 @@ public class UserModel {
     @DatabaseField
     public int sex = Const.MALE;     //性别
     @DatabaseField
+    public int age = 0;         //年龄
+    @DatabaseField
     public int moving_num = 0;  //动态个数
     @DatabaseField
     public int update_time = 0; //上传时间
@@ -31,9 +33,9 @@ public class UserModel {
     /**
      * 对象操作类
      */
-    private static Dao<UserModel, Integer> sDao = null;
+    private static Dao<UserModel, String> sDao = null;
 
-    public static Dao<UserModel, Integer> Dao() {
+    public static Dao<UserModel, String> Dao() {
         if (sDao == null && DBOpenHelper.getInstance() != null) {
             try {
                 // 请确保DBOpenHelper创建成功

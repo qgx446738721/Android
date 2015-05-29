@@ -6,6 +6,8 @@
 
     <org.voiddog.mblog.ui.UserBlogPullListView
         android:id="@+id/ptz_lv_user_blog"
+        android:divider="@color/transparent"
+        android:dividerPadding="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

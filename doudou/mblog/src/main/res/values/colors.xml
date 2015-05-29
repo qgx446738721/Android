@@ -28,7 +28,7 @@
     <color name="dark_green">#669999</color>
     <color name="dark_red">#996666</color>
     <!--card view-->
-    <color name="card_view_bg">@null</color>
+    <color name="card_view_bg">#555</color>
     <!--article detail-->
     <color name="article_title_bg">#55000000</color>
     <color name="article_content_bg">#55000000</color>

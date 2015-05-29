@@ -11,5 +11,8 @@ public class ArticleData {
     public String sub_title;
     public String content;
     public String pic;
-    public String create_time;
+    public String head;
+    public String nickname;
+    public int praise_num = 0;
+    public int comment_num = 0;
 }

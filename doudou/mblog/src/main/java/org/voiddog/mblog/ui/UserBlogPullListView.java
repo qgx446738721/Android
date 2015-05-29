@@ -13,6 +13,7 @@ import org.voiddog.lib.ui.PullToZoomListViewEx;
 public class UserBlogPullListView extends PullToZoomListViewEx{
 
     TitleBar title_bar;
+    AbsListView.OnScrollListener scrollListener;
 
     public UserBlogPullListView(Context context) {
         super(context);
@@ -22,6 +23,10 @@ public class UserBlogPullListView extends PullToZoomListViewEx{
     public UserBlogPullListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getPullRootView().setDividerHeight(0);
+    }
+
+    public void setScrollListener(AbsListView.OnScrollListener scrollListener){
+        this.scrollListener = scrollListener;
     }
 
     public void setTitle_bar(TitleBar title_bar){
@@ -39,10 +44,16 @@ public class UserBlogPullListView extends PullToZoomListViewEx{
                 title_bar.setBackgroundColor((alpha << 24));
             }
         }
+        if(scrollListener != null){
+            scrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         super.onScrollStateChanged(view, scrollState);
+        if(scrollListener != null){
+            scrollListener.onScrollStateChanged(view, scrollState);
+        }
     }
 }

@@ -85,4 +85,7 @@
     <!--注册页面-->
     <style name="RegisterEditText" parent="LoginEditText">
     </style>
+    <!--发布动态-->
+    <style name="PublishEditText" parent="LoginEditText">
+    </style>
 </resources>
