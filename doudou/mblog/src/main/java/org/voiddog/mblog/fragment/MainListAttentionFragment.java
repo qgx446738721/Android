@@ -1,6 +1,7 @@
 package org.voiddog.mblog.fragment;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -21,7 +22,7 @@ import org.voiddog.mblog.R;
 import org.voiddog.mblog.activity.ArticleDetailActivity_;
 import org.voiddog.mblog.adapter.ArticleListAdapter;
 import org.voiddog.mblog.data.ArticleData;
-import org.voiddog.mblog.http.GetAllMovingRequest;
+import org.voiddog.mblog.http.GetAttentionMovingRequest;
 import org.voiddog.mblog.preference.Config_;
 
 import java.util.List;
@@ -33,11 +34,11 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import in.srain.cube.views.ptr.util.PtrLocalDisplay;
 
 /**
- * 主页文章列表
- * Created by Dog on 2015/4/4.
+ * 主页我的关注列表
+ * Created by Dog on 2015/5/31.
  */
 @EFragment(R.layout.fragment_main_lsit)
-public class MainListFragment extends Fragment implements AbsListView.OnScrollListener{
+public class MainListAttentionFragment extends Fragment implements AbsListView.OnScrollListener{
     /**
      * View区
      */
@@ -48,7 +49,7 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     @Pref
     Config_ config;
 
-    GetAllMovingRequest movingRequest = new GetAllMovingRequest();
+    GetAttentionMovingRequest movingRequest = new GetAttentionMovingRequest();
     boolean isLoading, isFirstLoad = true;
     private int firstVisibleItem, visibleItemCount, totalItemCount;
 

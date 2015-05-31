@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:contentDescription="模糊背景" />
 
-    <ScrollView
+    <org.voiddog.lib.ui.BounceScrollView
         android:background="@color/article_content_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,6 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
+                fresco:progressBarImage="@drawable/horizontal_progress_bar"
+                fresco:progressBarImageScaleType="centerInside"
                 android:contentDescription="本文章的照片"/>
 
             <TextView
@@ -129,10 +131,11 @@
                 android:layout_height="@dimen/article_detail_praise_height">
 
                 <com.beardedhen.androidbootstrap.FontAwesomeText
-                    fontawesometext:fa_icon="fa-heart"
+                    android:id="@+id/fat_praise"
+                    fontawesometext:fa_icon="fa-heart-o"
                     android:gravity="center"
                     android:textSize="18sp"
-                    android:textColor="@color/red"
+                    android:textColor="@color/white"
                     android:layout_width="@dimen/article_detail_praise_height"
                     android:layout_height="@dimen/article_detail_praise_height" />
 
@@ -149,7 +152,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </org.voiddog.lib.ui.BounceScrollView>
 
     <org.voiddog.mblog.ui.TitleBar_
         android:id="@+id/title_bar"
@@ -158,4 +161,32 @@
         TitleBar:titleBg="@color/article_title_bg"
         TitleBar:leftIcon="fa-arrow-left"/>
 
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="#55000000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            style="@style/LoginEditText"
+            android:id="@+id/et_comment"
+            android:hint="说一些什么吧"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/tv_comment"
+            android:text="评论"
+            android:background="@drawable/comment_btn_bg"
+            android:minWidth="0dp"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 </FrameLayout>

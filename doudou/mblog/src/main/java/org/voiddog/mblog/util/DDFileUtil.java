@@ -78,10 +78,10 @@ public class DDFileUtil extends FileUtil {
 
     public static File saveImg(Bitmap b, String outPath, int maxWidth, int maxHeight, int q){
         if(maxWidth < b.getWidth() || maxHeight < b.getHeight()){
-            float simpleSize = 1;
+            float simpleSize;
             float scaleWidth = ((float)b.getWidth())/maxWidth;
-            float scaleheight = ((float)b.getHeight())/maxHeight;
-            simpleSize = scaleWidth > scaleheight ? scaleWidth : scaleheight;
+            float scaleHeight = ((float)b.getHeight())/maxHeight;
+            simpleSize = scaleWidth > scaleHeight ? scaleWidth : scaleHeight;
             int newWidth = (int)(b.getWidth()/simpleSize);
             int newHeight = (int)(b.getHeight()/simpleSize);
             return saveImg(

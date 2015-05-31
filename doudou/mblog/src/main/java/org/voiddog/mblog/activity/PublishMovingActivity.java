@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 
@@ -26,7 +27,6 @@ import org.voiddog.lib.util.StringUtil;
 import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.data.PostImgResponse;
-import org.voiddog.mblog.fragment.RegisterStep2Fragment;
 import org.voiddog.mblog.http.ImagePost;
 import org.voiddog.mblog.http.PublishMovingRequest;
 import org.voiddog.mblog.preference.Config_;
@@ -41,7 +41,6 @@ import org.voiddog.mblog.util.DialogUtil;
 @EActivity(R.layout.activity_publish_moving)
 public class PublishMovingActivity extends AppCompatActivity{
     public static final int REQUEST_CHOSE_PHOTO = 0;
-    public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int REQUEST_CROP_PHOTO = 2;
 
     @ViewById
@@ -65,7 +64,8 @@ public class PublishMovingActivity extends AppCompatActivity{
         setUpTitle();
 
         if(isCamera){
-            // TODO 跳转到相机
+            TakePhotoActivity_.intent(this)
+                    .startForResult(REQUEST_CHOSE_PHOTO);
         }
         else{
             ChoseImgFromLibActivity_.intent(this)
@@ -79,23 +79,40 @@ public class PublishMovingActivity extends AppCompatActivity{
        if(et_content.isFocusable()) {
            switch (view.getId()) {
                case R.id.btn_h1: {
-                   et_content.append("<h1></h1>");
+                   appendAndMove(et_content, "<big></big>", 5);
                    break;
                }
                case R.id.btn_h3: {
-                   et_content.append("<h3></h3>");
+                   appendAndMove(et_content, "<small></small>", 7);
                    break;
                }
                case R.id.btn_a: {
-                   et_content.append("<a href=\"\"></a>");
+                   appendAndMove(et_content, "<a></a>", 3);
                    break;
                }
                case R.id.btn_strong: {
-                   et_content.append("<strong></strong>");
+                   appendAndMove(et_content, "<strong></strong>", 8);
                    break;
                }
            }
        }
+    }
+
+    @Click(R.id.sdv_upload)
+    void onHeadClick(){
+        String[] photoPaths = new String[1];
+        photoPaths[0] = path;
+        PhotoPreviewActivity_.intent(this)
+                .isLocal(true)
+                .photoPaths(photoPaths)
+                .start();
+    }
+
+    void appendAndMove(EditText editText, String s, int moveStep){
+        int index = editText.getSelectionStart();
+        Editable editable = editText.getText();
+        editable.insert(index, s);
+        editText.setSelection(index + moveStep);
     }
 
     void setUpTitle(){

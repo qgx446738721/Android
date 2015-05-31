@@ -85,7 +85,7 @@ public class CropActivity extends AppCompatActivity {
         String path = null;
         if(mBitmap != null) {
             Bitmap bitmap = cil_crop.clip();
-            path = DDFileUtil.getLocalStorePath("tmp") + "head_crop_tmp.jpg";
+            path = DDFileUtil.getLocalStorePath("tmp") + System.currentTimeMillis() + ".jpg";
             if(DDFileUtil.saveImg(bitmap, path,
                     Const.MAX_SIZE, Const.MAX_SIZE, 100) == null){
                 path = null;

@@ -15,4 +15,6 @@ public class ArticleData {
     public String nickname;
     public int praise_num = 0;
     public int comment_num = 0;
+    public int create_time = 0;
+    public boolean is_praise = false;
 }

@@ -1,13 +1,18 @@
 package org.voiddog.mblog.adapter;
 
+import android.content.Context;
+import android.content.IntentFilter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import org.voiddog.mblog.data.ArticleData;
+import org.voiddog.mblog.data.CommentData;
+import org.voiddog.mblog.receiver.UpdateArticleItemReceiver;
 import org.voiddog.mblog.ui.ArticleItem;
 import org.voiddog.mblog.ui.ArticleItem_;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,15 +22,18 @@ import java.util.List;
 public class ArticleListAdapter extends BaseAdapter{
 
     List<ArticleData> dataList = null;
+    MyReceiver receiver;
 
-    public ArticleListAdapter(){}
+    public ArticleListAdapter(){
+        receiver = new MyReceiver();
+    }
 
     public ArticleListAdapter(List<ArticleData> dataList){
         this.dataList = dataList;
+        receiver = new MyReceiver();
     }
 
     public void setDataList(List<ArticleData> dataList){
-        clearAll();
         this.dataList = dataList;
         notifyDataSetChanged();
     }
@@ -44,6 +52,18 @@ public class ArticleListAdapter extends BaseAdapter{
         if(dataList != null){
             dataList.clear();
         }
+    }
+
+    public void registerReceiver(Context context){
+        IntentFilter filter = new IntentFilter(UpdateArticleItemReceiver.UPDATE_ARTICLE_ACTION);
+        context.registerReceiver(receiver, filter);
+    }
+
+    public void unRegisterReceiver(Context context){
+        try {
+            context.unregisterReceiver(receiver);
+        }
+        catch (Exception ignore){}
     }
 
     @Override
@@ -75,5 +95,48 @@ public class ArticleListAdapter extends BaseAdapter{
         articleItem.bind((ArticleData) getItem(position));
 
         return articleItem;
+    }
+
+    ArticleData findArticleById(int mid){
+        Iterator iterator = dataList.iterator();
+        while(iterator.hasNext()){
+            ArticleData articleData = (ArticleData) iterator.next();
+            if(articleData.mid == mid){
+                return articleData;
+            }
+        }
+        return null;
+    }
+
+    class MyReceiver extends UpdateArticleItemReceiver {
+
+        @Override
+        protected void onCommentAdd(int mid, CommentData data) {
+            ArticleData articleData = findArticleById(mid);
+            if(articleData != null){
+                articleData.comment_num++;
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        protected void onPraiseArticle(int mid, boolean add) {
+            ArticleData articleData = findArticleById(mid);
+            if(articleData != null){
+                if(add) {
+                    articleData.comment_num++;
+                }
+                else{
+                    articleData.praise_num--;
+                }
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        protected void onReceiveArticleData(ArticleData articleData) {
+            dataList.add(0, articleData);
+            notifyDataSetChanged();
+        }
     }
 }

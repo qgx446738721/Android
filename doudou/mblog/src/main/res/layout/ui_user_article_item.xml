@@ -21,6 +21,8 @@
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/sdv_card_head"
                 fresco:placeholderImage="@color/gray"
+                fresco:progressBarImage="@drawable/horizontal_progress_bar"
+                fresco:progressBarImageScaleType="centerInside"
                 fresco:placeholderImageScaleType="fitCenter"
                 fresco:actualImageScaleType="centerCrop"
                 android:layout_width="match_parent"

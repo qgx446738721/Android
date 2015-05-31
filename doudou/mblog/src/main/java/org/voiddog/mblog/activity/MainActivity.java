@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.BasePostprocessor;
 import com.facebook.imagepipeline.request.Postprocessor;
+import com.google.gson.reflect.TypeToken;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -27,19 +30,30 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.voiddog.lib.http.DHttpRequestBase;
+import org.voiddog.lib.http.HttpNetWork;
+import org.voiddog.lib.http.HttpResponsePacket;
 import org.voiddog.lib.ui.CustomFontTextView;
 import org.voiddog.lib.util.ImageUtil;
+import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
+import org.voiddog.mblog.data.GetUserInfoResponseData;
+import org.voiddog.mblog.db.model.UserModel;
+import org.voiddog.mblog.fragment.MainListAttentionFragment;
+import org.voiddog.mblog.fragment.MainListAttentionFragment_;
+import org.voiddog.mblog.fragment.MainListFragment;
 import org.voiddog.mblog.fragment.MainListFragment_;
+import org.voiddog.mblog.fragment.TakeOrChoseDialogFragment;
+import org.voiddog.mblog.http.GetUserInfoRequest;
 import org.voiddog.mblog.preference.Config_;
 import org.voiddog.mblog.util.DDImageUtil;
 
+import java.sql.SQLException;
+
 @EActivity(R.layout.activity_main)
-@OptionsMenu(R.menu.menu_main)
 public class MainActivity extends AppCompatActivity {
     final int REQUEST_AUTH = 0;
-    final int REQUEST_UPLOAD = 1;
 
     @ViewById
     Toolbar tool_bar;
@@ -61,9 +75,13 @@ public class MainActivity extends AppCompatActivity {
     int defaultColor, activeColor;
     //判断用户是否登录
     boolean isUserLogin = false;
+    TakeOrChoseDialogFragment dialogFragment;
+    MainListFragment mainListFragment;
+    MainListAttentionFragment mainListAttentionFragment;
 
     @AfterViews
     void init(){
+        Log.i("TAG", "After Views");
         //一体化色彩
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -71,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mainActivity = this;
+        dialogFragment = new TakeOrChoseDialogFragment();
 
         tool_bar.setTitle("Home");
         tool_bar.setTitleTextColor(getResources().getColor(R.color.title_text));
@@ -93,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         dl_main.setDrawerListener(mDrawerToggle);
 
-        setUpLeftListMenu();
         setUpContent();
+        setUpLeftListMenu();
         autoLogin();
     }
 
@@ -104,32 +123,49 @@ public class MainActivity extends AppCompatActivity {
         ct_tv_home.performClick();
     }
 
-    @Click({R.id.ct_tv_home, R.id.ct_tv_hot, R.id.ct_tv_timeline, R.id.ct_tv_settings,
+    @Click({R.id.ct_tv_home, R.id.ct_tv_attention, R.id.ct_tv_settings, R.id.sdv_iv_user_head,
     R.id.ct_tv_auth, R.id.ll_main_list})
     void onMenuClick(View view){
+        dl_main.closeDrawers();
         switch (view.getId()){
             case R.id.ct_tv_home:{
                 activeView(view);
+                changeFragment(mainListFragment);
                 break;
             }
-            case R.id.ct_tv_hot:{
-                activeView(view);
-            }
-            case R.id.ct_tv_timeline:{
-                activeView(view);
+            case R.id.ct_tv_attention:{
+                if(isUserLogin && config.email().exists()) {
+                    activeView(view);
+                    changeFragment(mainListAttentionFragment);
+                }
+                else{
+                    jumpToLogin();
+                }
                 break;
             }
-            case R.id.ct_tv_settings:{
-                if(config.email().exists()) {
+            case R.id.sdv_iv_user_head:{
+                if(isUserLogin && config.email().exists()) {
                     UserBlogActivity_.intent(this)
                             .tEmail(config.email().get())
                             .start();
+                }
+                else{
+                    jumpToLogin();
+                }
+                break;
+            }
+            case R.id.ct_tv_settings:{
+                if(isUserLogin && config.email().exists()){
+                    // TODO 去设置页面
+                }
+                else{
+                    jumpToLogin();
                 }
                 break;
             }
             case R.id.ct_tv_auth:{
                 if(ct_tv_auth.getText().toString().equals("LOGIN")){
-                    LoginOrRegisterActivity_.intent(mainActivity).startForResult(REQUEST_AUTH);
+                    jumpToLogin();
                 }
                 else{
                     logout();
@@ -139,14 +175,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OptionsItem(R.id.menu_camera)
-    void onTakePhoto(){
-
-    }
-
-    @OptionsItem(R.id.menu_chose)
-    void onChoseFromLibrary(){
-        PublishMovingActivity_.intent(this).start();
+    @Click(R.id.cmb_plus)
+    void onCircleMenuClick(){
+        dialogFragment.show(getSupportFragmentManager(), "拍照或者选择图片");
     }
 
     void activeView(View view){
@@ -158,11 +189,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setUpContent(){
-        MainListFragment_ fragment = new MainListFragment_();
+        mainListFragment = new MainListFragment_();
+        mainListAttentionFragment = new MainListAttentionFragment_();
+    }
+
+    void changeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.alpha_in, R.anim.alpha_out)
                 .replace(R.id.ll_main_fragment, fragment)
                 .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
+    }
+
+    void jumpToLogin(){
+        LoginOrRegisterActivity_.intent(mainActivity).startForResult(REQUEST_AUTH);
     }
 
     /**
@@ -178,7 +218,35 @@ public class MainActivity extends AppCompatActivity {
      * 获取最新的用户信息
      */
     void getUserInfo(){
-        // TODO 网络登录 访问 获取用户信息
+        GetUserInfoRequest request = new GetUserInfoRequest();
+        request.email = config.email().get();
+        HttpNetWork.getInstance().request(request, new HttpNetWork.NetResponseCallback() {
+            @Override
+            public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                if(response.code == 0) {
+                    try {
+                        GetUserInfoResponseData userData = response.getData(new TypeToken<GetUserInfoResponseData>(){}.getType());
+                        UserModel.Dao().createOrUpdate(userData.info);
+                        config.edit()
+                                .sex().put(userData.info.sex)
+                                .nickname().put(userData.info.nickname)
+                                .head().put(userData.info.head)
+                                .apply();
+                        loadProfile(userData.info.head, userData.info.nickname);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    ToastUtil.showToast(response.message);
+                }
+            }
+        }, new HttpNetWork.NetErrorCallback() {
+            @Override
+            public void onError(DHttpRequestBase request, String errorMsg) {
+                ToastUtil.showToast("网络错误，无法获取用户信息");
+            }
+        });
     }
 
     /**
@@ -186,9 +254,10 @@ public class MainActivity extends AppCompatActivity {
      */
     void autoLogin(){
         boolean isAutoLogin = config.auto_login().get();
-        if(isAutoLogin) {
+        if(isAutoLogin && config.email().exists()) {
             isUserLogin = true;
             loadProfile(config.head().get(), config.nickname().get());
+            getUserInfo();
         }
         else{
             isUserLogin = false;

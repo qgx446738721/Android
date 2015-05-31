@@ -9,12 +9,14 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 import org.voiddog.lib.ui.CustomFontTextView;
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
+import org.voiddog.mblog.activity.UserBlogActivity_;
 import org.voiddog.mblog.data.ArticleData;
 import org.voiddog.mblog.util.DDImageUtil;
 
@@ -31,8 +33,9 @@ public class ArticleItem extends RelativeLayout{
     TextView tv_sub_title, tv_praise_num, tv_comment_num;
     @ViewById
     CustomFontTextView cf_tv_title;
-
     int headSize;
+
+    ArticleData data;
 
     public ArticleItem(Context context) {
         super(context);
@@ -51,7 +54,15 @@ public class ArticleItem extends RelativeLayout{
         headSize = getResources().getDimensionPixelSize(R.dimen.article_item_head_size);
     }
 
+    @Click(R.id.sdv_user_head)
+    void onHeadClick(){
+        UserBlogActivity_.intent(getContext())
+                .tEmail(data.email)
+                .start();
+    }
+
     public void bind(final ArticleData data){
+        this.data = data;
         cf_tv_title.setText(data.title);
         tv_sub_title.setText(data.sub_title);
         tv_praise_num.setText(Integer.toString(data.praise_num));

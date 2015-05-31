@@ -8,20 +8,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.BasePostprocessor;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.imagepipeline.request.Postprocessor;
+import com.google.gson.reflect.TypeToken;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -39,14 +37,24 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.voiddog.lib.http.DHttpRequestBase;
+import org.voiddog.lib.http.HttpNetWork;
+import org.voiddog.lib.http.HttpResponsePacket;
 import org.voiddog.lib.util.ImageUtil;
 import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.lib.util.StringUtil;
+import org.voiddog.lib.util.TimeUtil;
 import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.Const;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
+import org.voiddog.mblog.adapter.PraiseAdapter;
+import org.voiddog.mblog.data.ArticleData;
+import org.voiddog.mblog.http.GetArticleRequest;
+import org.voiddog.mblog.preference.Config_;
 import org.voiddog.mblog.ui.TitleBar;
+import org.voiddog.mblog.util.DDImageUtil;
 import org.voiddog.mblog.util.DialogUtil;
 
 /**
@@ -67,13 +75,18 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     TextView tv_user_name, tv_time;
     @ViewById
     RecyclerView rv_praise;
+    @ViewById
+    FontAwesomeText fat_praise;
     @Extra
     int article_id;
     @Extra
     String article_content, article_title, article_subtitle;
+    @Pref
+    Config_ config;
 
     IWeiboShareAPI mWeiboShareAPI;
     Dialog progressDialog = null;
+    PraiseAdapter adapter = new PraiseAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +135,9 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
         //设置图片大小为1:1
         sdv_card_head.setAspectRatio(1.0f);
         //填充原始数据
-        tv_content.setText(article_content);
+        tv_content.setText(Html.fromHtml(article_content));
+        //绑定适配器
+        rv_praise.setAdapter(adapter);
         loadData();
     }
 
@@ -142,46 +157,54 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     }
 
     void loadData(){
-//        if(!progressDialog.isShowing()){
-//            progressDialog.show();
-//        }
-//        MyHttpRequest.GetArticle getArticle = new MyHttpRequest.GetArticle(article_id);
-//        MyHttpNetWork.getInstance().request(getArticle, new DJsonObjectResponse() {
-//            @Override
-//            public void onSuccess(int statusCode, DResponse response) {
-//                progressDialog.cancel();
-//                if (response.code == 0) {
-//                    try {
-//                        HttpStruct.Article article = response.getData(HttpStruct.Article.class);
-//                        tv_content.setText(article.body);
-//                        tv_user_name.setText(article.nickname);
-//                        tv_time.setText(article.updated_at);
-//                        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(MyApplication.getImageHostUri(article.head))
-//                                .setResizeOptions(new ResizeOptions(sdv_user_head.getWidth() << 1, sdv_user_head.getHeight() << 1))
-//                                .build();
-//                        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-//                                .setOldController(sdv_user_head.getController())
-//                                .setImageRequest(request)
-//                                .build();
-//                        sdv_user_head.setController(controller);
-//                        loadImage(article.image);
-//                    } catch (Exception ignore) {
-//                        ToastUtil.showToast("数据错误");
-//                        ArticleDetailActivity.this.finish();
-//                    }
-//                } else {
-//                    ToastUtil.showToast(response.message);
-//                    ArticleDetailActivity.this.finish();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Throwable throwable) {
-//                progressDialog.cancel();
-//                ToastUtil.showToast("网络或服务器错误, 错误代码: " + statusCode);
-//                ArticleDetailActivity.this.finish();
-//            }
-//        });
+        if(!progressDialog.isShowing()){
+            progressDialog.show();
+        }
+        GetArticleRequest articleRequest = new GetArticleRequest();
+        articleRequest.mid = article_id;
+        articleRequest.email = config.email().getOr("");
+        HttpNetWork.getInstance().request(articleRequest, new HttpNetWork.NetResponseCallback() {
+            @Override
+            public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                progressDialog.cancel();
+                if(response.code == 0){
+                    ArticleData articleData = response.getData(
+                            new TypeToken<ArticleData>(){}.getType()
+                    );
+                    if(articleData.is_praise){
+                        fat_praise.setIcon("fa-heart");
+                        fat_praise.setTextColor(getResources().getColor(R.color.red));
+                    }
+                    else{
+                        fat_praise.setIcon("fa-heart-o");
+                        fat_praise.setTextColor(getResources().getColor(R.color.white));
+                    }
+                    tv_content.setText(Html.fromHtml(articleData.content));
+                    tv_user_name.setText(articleData.nickname);
+                    tv_time.setText(TimeUtil.getTimeStringByMillis(articleData.create_time));
+                    Uri uri = MyApplication.getImageHostUri(articleData.head);
+                    int head_size = getResources().getDimensionPixelSize(R.dimen.article_detail_head_size);
+                    sdv_user_head.setController(ImageUtil.getControllerWithSize(
+                            sdv_user_head.getController(), uri, head_size, head_size
+                    ));
+                    loadImage(articleData.pic);
+                }
+                else{
+                    onLoadDataFailure(response.message);
+                }
+            }
+        }, new HttpNetWork.NetErrorCallback() {
+            @Override
+            public void onError(DHttpRequestBase request, String errorMsg) {
+                progressDialog.cancel();
+                onLoadDataFailure("网络错误");
+            }
+        });
+    }
+
+    void onLoadDataFailure(String message){
+        ToastUtil.showToast(message);
+        finish();
     }
 
     /**
@@ -244,20 +267,14 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
                 startBlur(bitmap);
             }
         };
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()))
-                .setPostprocessor(postprocessor)
-                .build();
-        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setOldController(sdv_card_head.getController())
-                .build();
-        sdv_card_head.setController(controller);
+        sdv_card_head.setController(DDImageUtil.getControllerBySize(
+                sdv_card_head, uri, SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight(), postprocessor
+        ));
     }
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 8, 10);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 2, 8);
         setBlur(newBitmap);
     }
 

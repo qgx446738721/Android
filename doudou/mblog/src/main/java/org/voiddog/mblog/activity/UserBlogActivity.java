@@ -1,5 +1,6 @@
 package org.voiddog.mblog.activity;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -35,12 +37,14 @@ import org.voiddog.mblog.data.ArticleData;
 import org.voiddog.mblog.data.GetMovingByIdRequest;
 import org.voiddog.mblog.data.GetUserInfoResponseData;
 import org.voiddog.mblog.db.model.UserModel;
+import org.voiddog.mblog.http.AddAttentionRequest;
 import org.voiddog.mblog.http.GetUserInfoRequest;
 import org.voiddog.mblog.preference.Config_;
 import org.voiddog.mblog.ui.SexAgeView;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.ui.UserBlogPullListView;
 import org.voiddog.mblog.util.DDImageUtil;
+import org.voiddog.mblog.util.DialogUtil;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -77,6 +81,7 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
     int firstVisibleItem, visibleItemCount, totalItemCount;
     boolean isLoading = false, hasMore = true;
     GetMovingByIdRequest movingRequest = new GetMovingByIdRequest();
+    Dialog progressDialog;
 
     @AfterViews
     void init(){
@@ -111,8 +116,20 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
         loadUserInfoFromNet();
         movingRequest.page = 0;
         movingRequest.id = tEmail;
-        movingRequest.email = mEmail;
+        movingRequest.email = mEmail == null ? "" : mEmail;
         loadMoreListData();
+    }
+
+    @ItemClick(R.id.ptz_lv_user_blog)
+    void onArticleClick(ArticleData articleData){
+        if(articleData != null){
+            ArticleDetailActivity_.intent(this)
+                    .article_content(articleData.content)
+                    .article_id(articleData.mid)
+                    .article_subtitle(articleData.sub_title)
+                    .article_title(articleData.title)
+                    .start();
+        }
     }
 
     void initHeadView(){
@@ -151,6 +168,12 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
                 finish();
             }
         });
+        if(mEmail != null && mEmail.equals(tEmail)){
+            showEdit();
+        }
+        else{
+            showAttention();
+        }
     }
 
     void loadMoreListData(){
@@ -240,17 +263,12 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
             cf_tv_user_name.setText(mUserModel.nickname);
             sex_age.setAge(mUserModel.age);
             sex_age.setSex(mUserModel.sex);
-            if(mEmail != null && mUserModel.email.equals(mEmail)){
-                showEdit();
-            }
-            else{
-                hideEdit();
-            }
         }
     }
 
     void showEdit(){
         title_bar.setRightIcon("fa-cog");
+        title_bar.setRightText("");
         title_bar.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,9 +277,40 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
         });
     }
 
-    void hideEdit(){
+    void showAttention(){
         title_bar.setRightIcon(null);
-        title_bar.setOnRightClickListener(null);
+        title_bar.setRightText("关注");
+        title_bar.setOnRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mEmail == null){
+                    LoginOrRegisterActivity_.intent(UserBlogActivity.this)
+                            .start();
+                }
+                else {
+                    if(progressDialog == null){
+                        progressDialog = DialogUtil.createProgressDialog(UserBlogActivity.this);
+                    }
+                    progressDialog.show();
+                    AddAttentionRequest attentionRequest = new AddAttentionRequest();
+                    attentionRequest.s_email = mEmail;
+                    attentionRequest.t_email = tEmail;
+                    HttpNetWork.getInstance().request(attentionRequest, new HttpNetWork.NetResponseCallback() {
+                        @Override
+                        public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                            progressDialog.cancel();
+                            ToastUtil.showToast(response.message);
+                        }
+                    }, new HttpNetWork.NetErrorCallback() {
+                        @Override
+                        public void onError(DHttpRequestBase request, String errorMsg) {
+                            progressDialog.cancel();
+                            ToastUtil.showToast("网络错误");
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Background

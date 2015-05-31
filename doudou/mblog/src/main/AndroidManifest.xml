@@ -25,6 +25,7 @@
         <activity
             android:name=".activity.ArticleDetailActivity_"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:label="照片详情">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
@@ -43,6 +44,9 @@
         <activity android:name=".activity.ChoseImgFromLibActivity_"
             android:screenOrientation="portrait"
             android:label="从相册选取"/>
+        <activity android:name=".activity.TakePhotoActivity_"
+            android:screenOrientation="portrait"
+            android:label="拍照"/>
         <activity android:name=".activity.PhotoPreviewActivity_"
             android:screenOrientation="portrait"
             android:label="预览图片"/>

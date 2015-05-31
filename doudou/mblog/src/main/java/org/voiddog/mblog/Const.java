@@ -12,7 +12,7 @@ public class Const {
     public static int MALE = 0;
     public static int FEMALE = 1;
     //图片上传尺寸
-    public static int MAX_SIZE = 600;
+    public static int MAX_SIZE = 1080;
 
 
     //微博app key

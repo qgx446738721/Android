@@ -18,8 +18,7 @@
     <string name="menu_library">chose from library</string>
     <!--主页menu-->
     <string name="main_menu_list_home">HOME</string>
-    <string name="main_menu_list_hot">HOT</string>
-    <string name="main_menu_list_time_line">TIMELINE</string>
+    <string name="main_menu_list_attention">MY ATTENTION</string>
     <string name="main_menu_list_setting">SETTINGS</string>
     <string name="main_menu_list_login">LOGIN</string>
     <!--登录选择界面-->

@@ -66,21 +66,12 @@
                 android:layout_height="wrap_content" />
 
             <org.voiddog.lib.ui.CustomFontTextView
-                android:id="@+id/ct_tv_hot"
+                android:id="@+id/ct_tv_attention"
                 style="@style/MainMenuList"
-                android:text="@string/main_menu_list_hot"
+                android:text="@string/main_menu_list_attention"
                 CustomFont:fontFace="Roboto-Light.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-            <org.voiddog.lib.ui.CustomFontTextView
-                android:id="@+id/ct_tv_timeline"
-                style="@style/MainMenuList"
-                android:text="@string/main_menu_list_time_line"
-                CustomFont:fontFace="Roboto-Light.ttf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         </LinearLayout>
 
         <LinearLayout

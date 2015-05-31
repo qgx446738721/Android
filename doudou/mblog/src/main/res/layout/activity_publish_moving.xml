@@ -17,6 +17,7 @@
     <EditText
         android:id="@+id/et_title"
         style="@style/PublishEditText"
+        android:textSize="23sp"
         android:maxLines="1"
         android:maxLength="10"
         android:hint="标题 (不超过10个字)"
@@ -49,36 +50,41 @@
         android:orientation="horizontal"
         android:gravity="bottom"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/btn_h1"
-            android:background="@drawable/btn_gray_bg"
+            android:background="@drawable/btn_gray_square_bg"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:text="大"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:layout_margin="@dimen/publish_article_bottom_btn_divide"
             android:textSize="@dimen/default_text_size"
+            android:layout_marginTop="@dimen/publish_article_bottom_btn_divide"
             android:minWidth="@dimen/publish_article_bottom_btn_width"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/publish_article_bottom_btn_height" />
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/btn_h3"
-            android:background="@drawable/btn_gray_bg"
+            android:background="@drawable/btn_gray_right_radio_bg"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:text="小"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:layout_margin="@dimen/publish_article_bottom_btn_divide"
+            android:layout_marginTop="@dimen/publish_article_bottom_btn_divide"
             android:textSize="@dimen/default_text_size"
             android:minWidth="@dimen/publish_article_bottom_btn_width"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/publish_article_bottom_btn_height" />
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/sdv_upload"
@@ -86,37 +92,41 @@
             fresco:placeholderImage="@color/gray"
             fresco:placeholderImageScaleType="fitCenter"
             fresco:roundedCornerRadius="5dp"
-            android:layout_margin="@dimen/publish_article_bottom_btn_divide"
             android:layout_width="@dimen/publish_article_bottom_photo_width"
             android:layout_height="@dimen/publish_article_bottom_photo_height"/>
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
         <Button
             android:id="@+id/btn_a"
-            android:background="@drawable/btn_gray_bg"
+            android:background="@drawable/btn_gray_left_radio_bg"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:text="链接"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:layout_margin="@dimen/publish_article_bottom_btn_divide"
             android:textSize="@dimen/default_text_size"
+            android:layout_marginTop="@dimen/publish_article_bottom_btn_divide"
             android:minWidth="@dimen/publish_article_bottom_btn_width"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/publish_article_bottom_btn_height" />
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/btn_strong"
-            android:background="@drawable/btn_gray_bg"
+            android:background="@drawable/btn_gray_square_bg"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:text="粗体"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:layout_margin="@dimen/publish_article_bottom_btn_divide"
             android:textSize="@dimen/default_text_size"
+            android:layout_marginTop="@dimen/publish_article_bottom_btn_divide"
             android:minWidth="@dimen/publish_article_bottom_btn_width"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/publish_article_bottom_btn_height" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

@@ -9,6 +9,8 @@ import org.voiddog.lib.BaseApplication;
  */
 public class ToastUtil {
     public static void showToast(String message){
-        Toast.makeText(BaseApplication.getInstance(), message, Toast.LENGTH_SHORT).show();
+        if(BaseApplication.getInstance() != null) {
+            Toast.makeText(BaseApplication.getInstance(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 }
