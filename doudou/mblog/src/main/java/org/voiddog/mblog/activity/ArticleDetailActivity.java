@@ -181,7 +181,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
                     }
                     tv_content.setText(Html.fromHtml(articleData.content));
                     tv_user_name.setText(articleData.nickname);
-                    tv_time.setText(TimeUtil.getTimeStringByMillis(articleData.create_time));
+                    tv_time.setText(TimeUtil.getTimeStringBySeconds(articleData.create_time));
                     Uri uri = MyApplication.getImageHostUri(articleData.head);
                     int head_size = getResources().getDimensionPixelSize(R.dimen.article_detail_head_size);
                     sdv_user_head.setController(ImageUtil.getControllerWithSize(

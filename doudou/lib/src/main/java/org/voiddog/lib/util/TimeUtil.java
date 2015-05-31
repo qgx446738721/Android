@@ -14,4 +14,10 @@ public class TimeUtil {
         Date d1 = new Date(millis);
         return dateFormat.format(d1);
     }
+
+    public static String getTimeStringBySeconds(int second){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        Date d1 = new Date(second*1000l);
+        return dateFormat.format(d1);
+    }
 }
