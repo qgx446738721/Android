@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void clearInfo(){
+        isUserLogin = false;
         ct_tv_user_name.setText("NOT LOGIN");
         ct_tv_auth.setText("LOGIN");
         iv_blur_bg.setVisibility(View.INVISIBLE);
@@ -285,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void loadProfile(String head, String name){
+        isUserLogin = true;
         ct_tv_auth.setText("LOGOUT");
         name = name.toUpperCase();
         ct_tv_user_name.setText(name);
@@ -332,7 +334,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_AUTH){
             if(resultCode == LoginOrRegisterActivity.LOGIN_SUCCESS){
-                isUserLogin = true;
                 if(data != null) {
                     loadProfile(data.getStringExtra("head"), data.getStringExtra("nickname"));
                 }
