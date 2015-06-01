@@ -88,7 +88,7 @@
     <org.voiddog.mblog.ui.TitleBar_
         android:id="@+id/title_bar"
         TitleBar:leftIcon="fa-arrow-left"
-        TitleBar:rightText="Go"
+        TitleBar:rightText="提交"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"/>
 

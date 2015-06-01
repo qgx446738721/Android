@@ -29,4 +29,5 @@
     <string name="edit_text_password">请输入密码</string>
     <string name="edit_text_retry_pass">请再次输入密码</string>
     <string name="register_name_input">Your Name</string>
+    <string name="age">年龄</string>
 </resources>

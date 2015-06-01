@@ -7,12 +7,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
@@ -46,16 +49,25 @@ import org.voiddog.lib.util.SizeUtil;
 import org.voiddog.lib.util.StringUtil;
 import org.voiddog.lib.util.TimeUtil;
 import org.voiddog.lib.util.ToastUtil;
+import org.voiddog.mblog.BuildConfig;
 import org.voiddog.mblog.Const;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
+import org.voiddog.mblog.adapter.CommentAdapter;
 import org.voiddog.mblog.adapter.PraiseAdapter;
 import org.voiddog.mblog.data.ArticleData;
+import org.voiddog.mblog.data.CommentData;
+import org.voiddog.mblog.http.CommentRequest;
 import org.voiddog.mblog.http.GetArticleRequest;
+import org.voiddog.mblog.http.GetMovingReplyRequest;
+import org.voiddog.mblog.http.GetPraiseRequest;
 import org.voiddog.mblog.preference.Config_;
+import org.voiddog.mblog.receiver.UpdateArticleItemReceiver;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.util.DDImageUtil;
 import org.voiddog.mblog.util.DialogUtil;
+
+import java.util.List;
 
 /**
  * 文件详情页面
@@ -77,6 +89,10 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     RecyclerView rv_praise;
     @ViewById
     FontAwesomeText fat_praise;
+    @ViewById
+    EditText et_comment;
+    @ViewById
+    ListView lv_comment;
     @Extra
     int article_id;
     @Extra
@@ -87,6 +103,9 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
     IWeiboShareAPI mWeiboShareAPI;
     Dialog progressDialog = null;
     PraiseAdapter adapter = new PraiseAdapter();
+    CommentAdapter commentAdapter;
+    int isPraise = 0;
+    GetPraiseRequest getPraiseRequest = new GetPraiseRequest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +143,8 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
 
     @AfterViews
     void init(){
+        commentAdapter = new CommentAdapter(this);
+
         //一体化色彩
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -136,14 +157,109 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
         sdv_card_head.setAspectRatio(1.0f);
         //填充原始数据
         tv_content.setText(Html.fromHtml(article_content));
-        //绑定适配器
-        rv_praise.setAdapter(adapter);
+        setUpPraiseRecycleView();
+        setCommentList();
         loadData();
     }
 
     @Click(R.id.fat_share)
     void startShare(){
         shareToWeiBo();
+    }
+
+    @Click(R.id.tv_comment)
+    void startComment(){
+        if(config.email().exists()){
+            String content = et_comment.getText().toString();
+            if(StringUtil.isEmpty(content)){
+                ToastUtil.showToast("评论内容");
+                return;
+            }
+            String email = config.email().get();
+            final CommentRequest commentRequest = new CommentRequest();
+            commentRequest.email = email;
+            commentRequest.mid = article_id;
+            commentRequest.content = content;
+            progressDialog.show();
+            HttpNetWork.getInstance().request(commentRequest, new HttpNetWork.NetResponseCallback() {
+                @Override
+                public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                    progressDialog.cancel();
+                    ToastUtil.showToast(response.message);
+                    if(response.code == 0){
+                        et_comment.setText("");
+                        Intent intent = new Intent();
+                        intent.setAction(UpdateArticleItemReceiver.UPDATE_ARTICLE_ACTION);
+                        intent.putExtra("mid", article_id);
+                        intent.putExtra("COMMAND", UpdateArticleItemReceiver.ACTION_COMMENT_ADD);
+                        ArticleDetailActivity.this.sendBroadcast(intent);
+                        //添加数据到当前的评论列表
+                        CommentData data = new CommentData();
+                        data.content = commentRequest.content;
+                        data.create_time = System.currentTimeMillis() / 1000;
+                        data.email = config.email().get();
+                        data.head = config.head().get();
+                        data.nickname = config.nickname().get();
+                        commentAdapter.addCommentData(data);
+                    }
+                }
+            }, new HttpNetWork.NetErrorCallback() {
+                @Override
+                public void onError(DHttpRequestBase request, String errorMsg) {
+                    progressDialog.cancel();
+                    ToastUtil.showToast("网络或服务器错误");
+                }
+            });
+        }
+        else{
+            LoginOrRegisterActivity_.intent(this).start();
+        }
+    }
+
+    @Click(R.id.fat_praise)
+    void onPraiseClick(){
+        if(config.email().exists()) {
+            CommentRequest commentRequest = new CommentRequest();
+            commentRequest.type = Const.PRAISE;
+            commentRequest.mid = article_id;
+            commentRequest.email = config.email().get();
+            progressDialog.show();
+            HttpNetWork.getInstance().request(commentRequest, new HttpNetWork.NetResponseCallback() {
+                @Override
+                public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                    progressDialog.cancel();
+                    if(response.code == 0){
+                        Intent intent = new Intent();
+                        intent.setAction(UpdateArticleItemReceiver.UPDATE_ARTICLE_ACTION);
+                        intent.putExtra("mid", article_id);
+                        if(isPraise == 1){
+                            isPraise = 0;
+                            intent.putExtra("COMMAND", UpdateArticleItemReceiver.ACTION_PRAISE_CANCEL);
+                            fat_praise.setIcon("fa-heart-o");
+                            fat_praise.setTextColor(getResources().getColor(R.color.white));
+                        }
+                        else{
+                            isPraise = 1;
+                            intent.putExtra("COMMAND", UpdateArticleItemReceiver.ACTION_PRAISE_ADD);
+                            fat_praise.setIcon("fa-heart");
+                            fat_praise.setTextColor(getResources().getColor(R.color.red));
+                        }
+                        ArticleDetailActivity.this.sendBroadcast(intent);
+                        requestPraiseFromNet();
+                    }
+                    ToastUtil.showToast(response.message);
+                }
+            }, new HttpNetWork.NetErrorCallback() {
+                @Override
+                public void onError(DHttpRequestBase request, String errorMsg) {
+                    progressDialog.cancel();
+                    ToastUtil.showToast("网络或服务器错误");
+                }
+            });
+        }
+        else{
+            LoginOrRegisterActivity_.intent(this).start();
+        }
     }
 
     void setUpTitle(){
@@ -167,15 +283,16 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
             @Override
             public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
                 progressDialog.cancel();
-                if(response.code == 0){
+                if (response.code == 0) {
                     ArticleData articleData = response.getData(
-                            new TypeToken<ArticleData>(){}.getType()
+                            new TypeToken<ArticleData>() {
+                            }.getType()
                     );
-                    if(articleData.is_praise){
+                    isPraise = articleData.is_praise;
+                    if (articleData.is_praise == 1) {
                         fat_praise.setIcon("fa-heart");
                         fat_praise.setTextColor(getResources().getColor(R.color.red));
-                    }
-                    else{
+                    } else {
                         fat_praise.setIcon("fa-heart-o");
                         fat_praise.setTextColor(getResources().getColor(R.color.white));
                     }
@@ -188,8 +305,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
                             sdv_user_head.getController(), uri, head_size, head_size
                     ));
                     loadImage(articleData.pic);
-                }
-                else{
+                } else {
                     onLoadDataFailure(response.message);
                 }
             }
@@ -199,6 +315,61 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
                 progressDialog.cancel();
                 onLoadDataFailure("网络错误");
             }
+        });
+    }
+
+    /**
+     * 设置赞的列表
+     */
+    void setUpPraiseRecycleView(){
+        getPraiseRequest.mid = article_id;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        //绑定适配器
+        rv_praise.setAdapter(adapter);
+        rv_praise.setLayoutManager(layoutManager);
+        requestPraiseFromNet();
+    }
+
+    void requestPraiseFromNet(){
+        HttpNetWork.getInstance().request(getPraiseRequest, new HttpNetWork.NetResponseCallback() {
+            @Override
+            public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                if (response.code == 0) {
+                    List<CommentData> dataList = response.getData(
+                            new TypeToken<List<CommentData>>() {
+                            }.getType()
+                    );
+                    adapter.setPraiseAdapter(dataList);
+                }
+            }
+        }, new HttpNetWork.NetErrorCallback() {
+            @Override
+            public void onError(DHttpRequestBase request, String errorMsg) {
+            }
+        });
+    }
+
+    /**
+     * 设置评论列表
+     */
+    void setCommentList(){
+        lv_comment.setAdapter(commentAdapter);
+        GetMovingReplyRequest replyRequest = new GetMovingReplyRequest();
+        replyRequest.mid = article_id;
+        HttpNetWork.getInstance().request(replyRequest, new HttpNetWork.NetResponseCallback() {
+            @Override
+            public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
+                if(response.code == 0){
+                    List<CommentData> commentDataList = response.getData(
+                            new TypeToken<List<CommentData>>(){}.getType()
+                    );
+                    commentAdapter.setCommentDataList(commentDataList);
+                }
+            }
+        }, new HttpNetWork.NetErrorCallback() {
+            @Override
+            public void onError(DHttpRequestBase request, String errorMsg) {                }
         });
     }
 
@@ -285,7 +456,9 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
 
     @Override
     public void onResponse(BaseResponse baseResponse) {
-        Log.e("fuck", "error code: " + baseResponse.errCode + " error message" + baseResponse.errMsg);
+        if(BuildConfig.DEBUG) {
+            Log.e("fuck", "error code: " + baseResponse.errCode + " error message" + baseResponse.errMsg);
+        }
         switch (baseResponse.errCode) {
             case WBConstants.ErrorCode.ERR_OK:
                 ToastUtil.showToast("分享成功");

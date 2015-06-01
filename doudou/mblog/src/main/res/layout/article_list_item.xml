@@ -73,6 +73,7 @@
         android:layout_height="wrap_content">
 
         <com.beardedhen.androidbootstrap.FontAwesomeText
+            android:id="@+id/fat_praise"
             android:gravity="end"
             android:textSize="@dimen/article_item_icon_size"
             android:textColor="@color/clouds"

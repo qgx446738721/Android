@@ -68,8 +68,8 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
         setUpListView();
 
         if(isFirstLoad){
+            adapter.registerReceiver(getActivity());
             isFirstLoad = false;
-            movingRequest.email = config.email().get();
             ptr_main.autoRefresh();
         }
     }
@@ -84,7 +84,7 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
                 .start();
     }
 
-    void setUpListView(){
+    void setUpListView() {
         lv_main.setOnScrollListener(this);
         lv_main.setAdapter(adapter);
     }
@@ -135,11 +135,13 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
             return;
         }
 
+        movingRequest.email = config.email().getOr("");
         movingRequest.page = 0;
         requestNetData();
     }
 
     void loadMore(){
+        movingRequest.email = config.email().getOr("");
         requestNetData();
     }
 
@@ -187,15 +189,12 @@ public class MainListFragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        adapter.registerReceiver(getActivity());
-    }
-
-    @Override
-    public void onStop() {
-        adapter.unRegisterReceiver(getActivity());
-        super.onStop();
+    public void onDestroy() {
+        try {
+            adapter.unRegisterReceiver(getActivity());
+        }
+        catch (Exception ignore){}
+        super.onDestroy();
     }
 
     /**

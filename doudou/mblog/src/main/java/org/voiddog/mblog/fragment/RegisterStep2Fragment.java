@@ -43,7 +43,7 @@ public class RegisterStep2Fragment extends Fragment{
     @ViewById
     TitleBar title_bar;
     @ViewById
-    EditText et_user_name;
+    EditText et_user_name, et_age;
     @ViewById
     SimpleDraweeView sdv_user_head;
     @ViewById
@@ -54,7 +54,7 @@ public class RegisterStep2Fragment extends Fragment{
     RegisterActivity activity;
     String fileUrl, nickName;
     Dialog dialog;
-    int sex = -1;
+    int sex = -1, age = -1;
 
     /**
      * 上传头像，并显示当前头像
@@ -67,13 +67,13 @@ public class RegisterStep2Fragment extends Fragment{
             @Override
             public void onSuccess(int statusCode, DResponse response) {
                 activity.hideDialog();
-                if(response.code == 0){
+                if (response.code == 0) {
                     PostImgResponse postImgResponse = response.getData(
-                            new TypeToken<PostImgResponse>(){}.getType()
+                            new TypeToken<PostImgResponse>() {
+                            }.getType()
                     );
                     fileUrl = postImgResponse.postImg;
-                }
-                else{
+                } else {
                     clearUserHead();
                 }
                 ToastUtil.showToast(response.message);
@@ -121,7 +121,7 @@ public class RegisterStep2Fragment extends Fragment{
         title_bar.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!checkInput()){
+                if (!checkInput()) {
                     return;
                 }
                 RegisterRequest registerRequest = new RegisterRequest();
@@ -139,11 +139,12 @@ public class RegisterStep2Fragment extends Fragment{
                     @Override
                     public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
                         activity.hideDialog();
-                        if(response.code == 0){
+                        if (response.code == 0) {
                             config.edit()
                                     .email().put(activity.email)
                                     .head().put(fileUrl)
                                     .moving_num().put(0)
+                                    .age().put(age)
                                     .nickname().put(nickName)
                                     .sex().put(sex)
                                     .auto_login().put(true)
@@ -197,6 +198,11 @@ public class RegisterStep2Fragment extends Fragment{
         nickName = et_user_name.getText().toString();
         if(StringUtil.isEmpty(nickName)){
             ToastUtil.showToast("请输入名称");
+            return false;
+        }
+        age = StringUtil.isAge(et_age.getText().toString());
+        if(age == -1){
+            ToastUtil.showToast("年龄不合法");
             return false;
         }
         return true;

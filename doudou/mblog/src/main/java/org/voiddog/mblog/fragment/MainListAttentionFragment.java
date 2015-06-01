@@ -70,7 +70,7 @@ public class MainListAttentionFragment extends Fragment implements AbsListView.O
 
         if(isFirstLoad){
             isFirstLoad = false;
-            movingRequest.email = config.email().get();
+            adapter.registerReceiver(getActivity());
             ptr_main.autoRefresh();
         }
     }
@@ -136,11 +136,13 @@ public class MainListAttentionFragment extends Fragment implements AbsListView.O
             return;
         }
 
+        movingRequest.email = config.email().getOr("");
         movingRequest.page = 0;
         requestNetData();
     }
 
     void loadMore(){
+        movingRequest.email = config.email().getOr("");
         requestNetData();
     }
 
@@ -188,15 +190,12 @@ public class MainListAttentionFragment extends Fragment implements AbsListView.O
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        adapter.registerReceiver(getActivity());
-    }
-
-    @Override
-    public void onStop() {
-        adapter.unRegisterReceiver(getActivity());
-        super.onStop();
+    public void onDestroy() {
+        try {
+            adapter.unRegisterReceiver(getActivity());
+        }
+        catch (Exception ignore){}
+        super.onDestroy();
     }
 
     /**

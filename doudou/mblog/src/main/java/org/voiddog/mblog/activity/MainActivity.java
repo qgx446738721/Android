@@ -1,6 +1,7 @@
 package org.voiddog.mblog.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -47,6 +48,7 @@ import org.voiddog.mblog.fragment.MainListFragment_;
 import org.voiddog.mblog.fragment.TakeOrChoseDialogFragment;
 import org.voiddog.mblog.http.GetUserInfoRequest;
 import org.voiddog.mblog.preference.Config_;
+import org.voiddog.mblog.receiver.UpdateUserInfoReceiver;
 import org.voiddog.mblog.util.DDImageUtil;
 
 import java.sql.SQLException;
@@ -78,14 +80,19 @@ public class MainActivity extends AppCompatActivity {
     TakeOrChoseDialogFragment dialogFragment;
     MainListFragment mainListFragment;
     MainListAttentionFragment mainListAttentionFragment;
+    UpdateUserInfoReceiver receiver;
 
     @AfterViews
     void init(){
-        Log.i("TAG", "After Views");
         //一体化色彩
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+        if(receiver == null){
+            receiver = new MyUpdateUserInfoReceiver();
+            IntentFilter filter = new IntentFilter(UpdateUserInfoReceiver.UPDATE_USER_INFO);
+            registerReceiver(receiver, filter);
         }
 
         mainActivity = this;
@@ -156,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.ct_tv_settings:{
                 if(isUserLogin && config.email().exists()){
-                    // TODO 去设置页面
+                    SettingActivity_.intent(this).start();
                 }
                 else{
                     jumpToLogin();
@@ -177,7 +184,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Click(R.id.cmb_plus)
     void onCircleMenuClick(){
-        dialogFragment.show(getSupportFragmentManager(), "拍照或者选择图片");
+        if(!dialogFragment.isAdded()) {
+            dialogFragment.show(getSupportFragmentManager(), "拍照或者选择图片");
+        }
     }
 
     void activeView(View view){
@@ -230,6 +239,8 @@ public class MainActivity extends AppCompatActivity {
                         config.edit()
                                 .sex().put(userData.info.sex)
                                 .nickname().put(userData.info.nickname)
+                                .age().put(userData.info.age)
+                                .moving_num().put(userData.info.moving_num)
                                 .head().put(userData.info.head)
                                 .apply();
                         loadProfile(userData.info.head, userData.info.nickname);
@@ -295,6 +306,15 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @Override
+    protected void onDestroy() {
+        try{
+            unregisterReceiver(receiver);
+        }
+        catch (Exception ignore){}
+        super.onDestroy();
+    }
+
     @Background
     void startBlur(Bitmap bitmap){
         Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 2, 8);
@@ -317,5 +337,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    class MyUpdateUserInfoReceiver extends UpdateUserInfoReceiver{
+
+        @Override
+        protected void onUpdate() {
+            getUserInfo();
+        }
     }
 }

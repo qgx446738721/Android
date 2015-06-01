@@ -9,10 +9,13 @@ public class Const {
     public static String HOST = "http://120.26.120.73/doudou/index.php/mobile/";
     //图片host
     public static String IMG_HOST = "http://120.26.120.73/doudou/Uploads/";
-    public static int MALE = 0;
+    public static int MALE = 2;
     public static int FEMALE = 1;
     //图片上传尺寸
     public static int MAX_SIZE = 1080;
+    //评论或赞
+    public static int PRAISE = 1;
+    public static int COMMENT = 2;
 
 
     //微博app key

@@ -49,4 +49,8 @@
     <dimen name="publish_article_bottom_btn_width">55dp</dimen>
     <dimen name="publish_article_bottom_btn_height">25dp</dimen>
     <dimen name="publish_article_bottom_btn_divide">5dp</dimen>
+    <!--评论-->
+    <dimen name="comment_head_size">50dp</dimen>
+    <dimen name="comment_padding">10dp</dimen>
+    <dimen name="comment_divide">5dp</dimen>
 </resources>

@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -33,6 +34,8 @@ public class ArticleItem extends RelativeLayout{
     TextView tv_sub_title, tv_praise_num, tv_comment_num;
     @ViewById
     CustomFontTextView cf_tv_title;
+    @ViewById
+    FontAwesomeText fat_praise;
     int headSize;
 
     ArticleData data;
@@ -66,7 +69,7 @@ public class ArticleItem extends RelativeLayout{
         cf_tv_title.setText(data.title);
         tv_sub_title.setText(data.sub_title);
         tv_praise_num.setText(Integer.toString(data.praise_num));
-        tv_comment_num.setText(Integer.toString(data.comment_num));
+        tv_comment_num.setText(Integer.toString(data.reply_num));
         if(data.pic != null){
             Uri uri = MyApplication.getImageHostUri(data.pic);
             sdv_card_head.setController(DDImageUtil.getControllerWithSize(
@@ -76,6 +79,12 @@ public class ArticleItem extends RelativeLayout{
             sdv_user_head.setController(DDImageUtil.getControllerWithSize(
                     sdv_user_head.getController(), uri, headSize, headSize
             ));
+        }
+        if(data.is_praise == 1){
+            fat_praise.setIcon("fa-heart");
+        }
+        else{
+            fat_praise.setIcon("fa-heart-o");
         }
     }
 }

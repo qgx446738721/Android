@@ -1,7 +1,11 @@
 package org.voiddog.lib.util;
 
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +14,10 @@ import java.util.regex.Pattern;
  * Created by Dog on 2015/5/2.
  */
 public class StringUtil {
+
+    //字体缓存
+    public static Map<String, Typeface> fontCache;
+
     /**
      * 检测邮箱地址是否合法
      * @param email
@@ -33,5 +41,37 @@ public class StringUtil {
 
     public static boolean isEmpty(String s){
         return s == null || s.length() == 0;
+    }
+
+    public static int isAge(String age){
+        try{
+            int res = Integer.parseInt(age);
+            if(res > 0 && res < 120){
+                return res;
+            }
+        }
+        catch (Exception ignore){
+        }
+        return -1;
+    }
+
+    public static Typeface getFontFace(AssetManager assetManager, String name){
+        try{
+            if(fontCache == null){
+                fontCache = new HashMap<>();
+            }
+            if(fontCache.containsKey(name)){
+                return fontCache.get(name);
+            }
+            else {
+                Typeface typeface = Typeface.createFromAsset(assetManager, name);
+                fontCache.put(name, typeface);
+                return typeface;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

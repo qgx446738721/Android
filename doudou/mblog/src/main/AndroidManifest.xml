@@ -60,6 +60,9 @@
             android:screenOrientation="portrait"
             android:label="发布动态"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".activity.SettingActivity_"
+            android:screenOrientation="portrait"
+            android:label="个人设置"/>
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"

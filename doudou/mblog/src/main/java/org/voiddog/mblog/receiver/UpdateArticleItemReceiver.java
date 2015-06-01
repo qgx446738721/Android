@@ -22,7 +22,7 @@ public abstract class UpdateArticleItemReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(UPDATE_ARTICLE_ACTION)) {
-            int command = intent.getIntExtra("COMMEND", 0);
+            int command = intent.getIntExtra("COMMAND", 0);
             switch (command){
                 case ACTION_ADD:{
                     Bundle bundle = intent.getExtras();
@@ -53,7 +53,7 @@ public abstract class UpdateArticleItemReceiver extends BroadcastReceiver{
                     if (bundle != null) {
                         CommentData commentData = (CommentData) bundle.get("data");
                         int mid = intent.getIntExtra("mid", -1);
-                        if (commentData != null && mid != -1) {
+                        if (mid != -1) {
                             onCommentAdd(mid, commentData);
                         }
                     }

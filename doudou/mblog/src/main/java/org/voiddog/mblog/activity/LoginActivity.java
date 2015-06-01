@@ -19,6 +19,7 @@ import org.voiddog.lib.util.StringUtil;
 import org.voiddog.lib.util.ToastUtil;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.data.UserData;
+import org.voiddog.mblog.db.model.UserModel;
 import org.voiddog.mblog.http.LoginRequest;
 import org.voiddog.mblog.preference.Config_;
 import org.voiddog.mblog.ui.TitleBar;
@@ -79,8 +80,8 @@ public class LoginActivity extends Activity {
             public void onResponse(DHttpRequestBase request, HttpResponsePacket response) {
                 dialog.cancel();
                 if(response.code == 0){
-                    UserData user = response.getData(
-                            new TypeToken<UserData>(){}.getType()
+                    UserModel user = response.getData(
+                            new TypeToken<UserModel>(){}.getType()
                     );
                     config.edit()
                             .email().put(user.email)
@@ -88,6 +89,7 @@ public class LoginActivity extends Activity {
                             .moving_num().put(user.moving_num)
                             .nickname().put(user.nickname)
                             .sex().put(user.sex)
+                            .age().put(user.age)
                             .auto_login().put(true)
                             .apply();
                     Intent intent = new Intent();

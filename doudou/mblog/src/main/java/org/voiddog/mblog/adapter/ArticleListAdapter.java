@@ -114,7 +114,7 @@ public class ArticleListAdapter extends BaseAdapter{
         protected void onCommentAdd(int mid, CommentData data) {
             ArticleData articleData = findArticleById(mid);
             if(articleData != null){
-                articleData.comment_num++;
+                articleData.reply_num++;
                 notifyDataSetChanged();
             }
         }
@@ -124,10 +124,12 @@ public class ArticleListAdapter extends BaseAdapter{
             ArticleData articleData = findArticleById(mid);
             if(articleData != null){
                 if(add) {
-                    articleData.comment_num++;
+                    articleData.praise_num++;
+                    articleData.is_praise = 1;
                 }
                 else{
                     articleData.praise_num--;
+                    articleData.is_praise = 0;
                 }
                 notifyDataSetChanged();
             }

@@ -56,7 +56,7 @@ public class UserArticleItem extends LinearLayout{
                 sdv_card_head.getController(), uri, SizeUtil.getScreenWidth(), SizeUtil.getScreenHeight()
         ));
         tv_praise_num.setText(Integer.toString(articleData.praise_num));
-        tv_comment_num.setText(Integer.toString(articleData.comment_num));
+        tv_comment_num.setText(Integer.toString(articleData.reply_num));
         tv_card_content.setText(Html.fromHtml(articleData.content));
         tv_title.setText(articleData.title);
         tv_sub_title.setText(articleData.sub_title);

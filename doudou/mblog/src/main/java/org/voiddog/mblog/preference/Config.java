@@ -16,6 +16,8 @@ public interface Config {
     String nickname();
     @DefaultInt(0)
     int sex();
+    @DefaultInt(0)
+    int age();
     @DefaultString("")
     String head();
     @DefaultInt(0)

@@ -1,6 +1,7 @@
 package org.voiddog.mblog.activity;
 
 import android.app.Dialog;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ItemClick;
@@ -29,6 +31,7 @@ import org.voiddog.lib.http.HttpResponsePacket;
 import org.voiddog.lib.ui.CustomFontTextView;
 import org.voiddog.lib.util.ImageUtil;
 import org.voiddog.lib.util.ToastUtil;
+import org.voiddog.mblog.Const;
 import org.voiddog.mblog.MyApplication;
 import org.voiddog.mblog.R;
 import org.voiddog.mblog.adapter.ArticleListAdapter;
@@ -40,6 +43,7 @@ import org.voiddog.mblog.db.model.UserModel;
 import org.voiddog.mblog.http.AddAttentionRequest;
 import org.voiddog.mblog.http.GetUserInfoRequest;
 import org.voiddog.mblog.preference.Config_;
+import org.voiddog.mblog.receiver.UpdateUserInfoReceiver;
 import org.voiddog.mblog.ui.SexAgeView;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.ui.UserBlogPullListView;
@@ -82,12 +86,19 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
     boolean isLoading = false, hasMore = true;
     GetMovingByIdRequest movingRequest = new GetMovingByIdRequest();
     Dialog progressDialog;
+    UserModel userModel;
+    MyUpdateUserInfoReceiver receiver;
 
     @AfterViews
     void init(){
         if(tEmail == null){
             finish();
             return;
+        }
+        if(receiver == null){
+            receiver = new MyUpdateUserInfoReceiver();
+            IntentFilter filter = new IntentFilter(UpdateUserInfoReceiver.UPDATE_USER_INFO);
+            registerReceiver(receiver, filter);
         }
         isLoading = false;
         hasMore = true;
@@ -153,6 +164,20 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
         ));
         ptz_lv_user_blog.setZoomView(iv_blur_bg);
         ptz_lv_user_blog.setTitle_bar(title_bar);
+
+        sdv_user_head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userModel != null) {
+                    String paths[] = new String[1];
+                    paths[0] = Const.IMG_HOST + userModel.head;
+                    PhotoPreviewActivity_.intent(UserBlogActivity.this)
+                            .isLocal(false)
+                            .photoPaths(paths)
+                            .start();
+                }
+            }
+        });
     }
 
     void setUpFootView(){
@@ -216,8 +241,8 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
      **/
     void loadLocalData(){
         try {
-            UserModel mUserModel = UserModel.Dao().queryForId(tEmail);
-            fillUserInfoData(mUserModel);
+            userModel = UserModel.Dao().queryForId(tEmail);
+            fillUserInfoData(userModel);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -233,9 +258,10 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
                     GetUserInfoResponseData responseData = response.getData(
                             new TypeToken<GetUserInfoResponseData>(){}.getType()
                     );
-                    fillUserInfoData(responseData.info);
+                    userModel = responseData.info;
+                    fillUserInfoData(userModel);
                     try {
-                        UserModel.Dao().createOrUpdate(responseData.info);
+                        UserModel.Dao().createOrUpdate(userModel);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -272,7 +298,7 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
         title_bar.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 去编辑个人信息页面
+                SettingActivity_.intent(UserBlogActivity.this).start();
             }
         });
     }
@@ -336,5 +362,22 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
         this.firstVisibleItem = firstVisibleItem;
         this.visibleItemCount = visibleItemCount;
         this.totalItemCount = totalItemCount;
+    }
+
+    @Override
+    protected void onDestroy() {
+        try{
+            unregisterReceiver(receiver);
+        }
+        catch (Exception ignore){}
+        super.onDestroy();
+    }
+
+    class MyUpdateUserInfoReceiver extends UpdateUserInfoReceiver {
+
+        @Override
+        protected void onUpdate() {
+            loadLocalData();
+        }
     }
 }
