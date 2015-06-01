@@ -341,7 +341,7 @@ public class UserBlogActivity extends AppCompatActivity implements AbsListView.O
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 2, 8);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 4, 4);
         applyBlur(newBitmap);
     }
 

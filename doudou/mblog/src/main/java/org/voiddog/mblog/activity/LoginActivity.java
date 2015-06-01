@@ -22,6 +22,7 @@ import org.voiddog.mblog.data.UserData;
 import org.voiddog.mblog.db.model.UserModel;
 import org.voiddog.mblog.http.LoginRequest;
 import org.voiddog.mblog.preference.Config_;
+import org.voiddog.mblog.receiver.UpdateUserInfoReceiver;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.util.DialogUtil;
 
@@ -93,9 +94,10 @@ public class LoginActivity extends Activity {
                             .auto_login().put(true)
                             .apply();
                     Intent intent = new Intent();
-                    intent.putExtra("head", user.head);
-                    intent.putExtra("nickname", user.nickname);
-                    setResult(LOGIN_SUCCESS, intent);
+                    intent.setAction(UpdateUserInfoReceiver.UPDATE_USER_INFO);
+                    intent.putExtra("COMMAND", UpdateUserInfoReceiver.NEED_UPDATE);
+                    sendBroadcast(intent);
+                    setResult(LOGIN_SUCCESS, null);
                     finish();
                 }
                 else{

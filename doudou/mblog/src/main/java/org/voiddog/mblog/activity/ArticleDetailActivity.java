@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -157,6 +158,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
         sdv_card_head.setAspectRatio(1.0f);
         //填充原始数据
         tv_content.setText(Html.fromHtml(article_content));
+        tv_content.setMovementMethod(LinkMovementMethod.getInstance());
         setUpPraiseRecycleView();
         setCommentList();
         loadData();
@@ -445,7 +447,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements IWeiboHa
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 2, 8);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 4, 4);
         setBlur(newBitmap);
     }
 

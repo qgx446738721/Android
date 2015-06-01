@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Background
     void startBlur(Bitmap bitmap){
-        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 2, 8);
+        Bitmap newBitmap = ImageUtil.getBlurImage(bitmap, 4, 4);
         applyBlur(newBitmap);
     }
 
@@ -333,7 +333,9 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == REQUEST_AUTH){
             if(resultCode == LoginOrRegisterActivity.LOGIN_SUCCESS){
                 isUserLogin = true;
-                loadProfile(data.getStringExtra("head"), data.getStringExtra("nickname"));
+                if(data != null) {
+                    loadProfile(data.getStringExtra("head"), data.getStringExtra("nickname"));
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

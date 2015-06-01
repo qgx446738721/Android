@@ -87,7 +87,7 @@ public class PublishMovingActivity extends AppCompatActivity{
                    break;
                }
                case R.id.btn_a: {
-                   appendAndMove(et_content, "<a></a>", 3);
+                   appendAndMove(et_content, "<a href=\"\"></a>", 13);
                    break;
                }
                case R.id.btn_strong: {

@@ -30,6 +30,7 @@ import org.voiddog.mblog.data.UserData;
 import org.voiddog.mblog.http.ImagePost;
 import org.voiddog.mblog.http.RegisterRequest;
 import org.voiddog.mblog.preference.Config_;
+import org.voiddog.mblog.receiver.UpdateUserInfoReceiver;
 import org.voiddog.mblog.ui.TitleBar;
 import org.voiddog.mblog.util.DDStringUtil;
 import org.voiddog.mblog.util.DialogUtil;
@@ -150,10 +151,11 @@ public class RegisterStep2Fragment extends Fragment{
                                     .auto_login().put(true)
                                     .apply();
                             Intent intent = new Intent();
-                            intent.putExtra("head", fileUrl);
-                            intent.putExtra("nickname", nickName);
-                            activity.setResult(RegisterActivity.REGISTER_SUCCESS, intent);
-                            activity.finish();
+                            intent.setAction(UpdateUserInfoReceiver.UPDATE_USER_INFO);
+                            intent.putExtra("COMMAND", UpdateUserInfoReceiver.NEED_UPDATE);
+                            getActivity().sendBroadcast(intent);
+                            getActivity().setResult(RegisterActivity.REGISTER_SUCCESS, null);
+                            getActivity().finish();
                         }
                         ToastUtil.showToast(response.message);
                     }
