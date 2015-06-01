@@ -132,6 +132,7 @@ public class RegisterStep2Fragment extends Fragment{
                 userData.email = activity.email;
                 userData.head = fileUrl;
                 userData.nickname = nickName;
+                userData.age= age;
                 userData.sex = sex;
                 registerRequest.info = userData;
                 //显示进度条
